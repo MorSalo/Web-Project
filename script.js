@@ -11,11 +11,11 @@ $("#addButton").click(function (e) {
 //TODO: I need to figure out how to take the id o the song without showing it on the doc
 $("#deleteButton").click(function (e) {
     e.preventDefault()
-    deleteBranch(document.getElementById("Id"))
+    deleteBranch($("#Id").val())
 })
 $("#updatebutton").click(function (e) {
     e.preventDefault()
-    updateSong(document.getElementById("Id"))
+    updateBranch($("#Id").val())
 })
 $("#showButton").click(function (e) {
     e.preventDefault()
@@ -24,34 +24,35 @@ $("#showButton").click(function (e) {
 fetch("/branches")
   .then(response => response.json())
   .then(data => {
-    data.forEach(branch => {
+    data.forEach(appendToBranchTable)
+        //branch => {
 
-        //appendToBranchTable(branch)
+    //     //appendToBranchTable(branch)
 
-      const row = document.createElement("tr");
+    //   const row = document.createElement("tr");
 
-      const IdCell = document.createElement("td");
-      IdCell.textContent = branch._id;
-      row.appendChild(IdCell);
+    //   const IdCell = document.createElement("td");
+    //   IdCell.textContent = branch._id;
+    //   row.appendChild(IdCell);
       
-      const cityCell = document.createElement("td");
-      cityCell.textContent = branch.city;
-      row.appendChild(cityCell);
+    //   const cityCell = document.createElement("td");
+    //   cityCell.textContent = branch.city;
+    //   row.appendChild(cityCell);
 
-      const addressCell = document.createElement("td");
-      addressCell.textContent = branch.address;
-      row.appendChild(addressCell);
+    //   const addressCell = document.createElement("td");
+    //   addressCell.textContent = branch.address;
+    //   row.appendChild(addressCell);
 
-      const yearsCell = document.createElement("td");
-      yearsCell.textContent = branch.years;
-      row.appendChild(yearsCell);
+    //   const yearsCell = document.createElement("td");
+    //   yearsCell.textContent = branch.years;
+    //   row.appendChild(yearsCell);
 
-      const openCell = document.createElement("td");
-      openCell.textContent = branch.open;
-      row.appendChild(openCell);
+    //   const openCell = document.createElement("td");
+    //   openCell.textContent = branch.open;
+    //   row.appendChild(openCell);
 
-      branchData.appendChild(row);
-    });
+    //   branchData.appendChild(row);
+    // });
   });
 
     // const showBranchBtn = document.getElementById("showButton");
@@ -70,7 +71,7 @@ fetch("/branches")
 })
 
 function clearForm() {
-    //$("#Id").val('')
+    $("#Id").val('')
     $("#city").val('')
     $("#address").val('')
     $("#years").val('')
@@ -81,8 +82,12 @@ function read_all() {
     $.ajax({
         type: "GET",
         url: URL,
+        dataType: "json",
         success: function (res) {
-            res.branch.map(appendToBranchTable)
+            //not sure that it will work bc i work with shcema an d not array
+            res.branch.forEach(appendToBranchTable)
+            //appendToBranchTable(res.bra)
+            
         },
         error: function (res) {
             alert(res.responseText)
@@ -90,12 +95,12 @@ function read_all() {
     });
 }
 
-function deleteSong(songId) {
+function deleteBranch(branchId) {
     $.ajax({
         type: "DELETE",
-        url: URL + '/' + songId,
+        url: URL + '/' + branchId,
         success: function () {
-            $(`#song-${songId}`).remove()
+            $(`#branch-${branchId}`).remove()
         },
         error: function (res) {
             alert(res.responseText)
@@ -103,16 +108,16 @@ function deleteSong(songId) {
     });
 }
 
-function createSong() {
-    const name = $("#name").val()
-    const author = $("#author").val()
-    const rating = $("#rating").val()
-    const haveVideo = $("#haveVideo").is(":checked")
+function createBranch() {
+    const city = $("#city").val()
+    const years = $("#years").val()
+    const address = $("#address").val()
+    const open = $("#open").is(":checked")
     const data = {
-        name,
-        author,
-        rating,
-        haveVideo
+        city,
+        years,
+        address,
+        open
     }
     $.ajax({
         type: "POST",
@@ -120,7 +125,8 @@ function createSong() {
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function (res) {
-            appendToSongsTable(res.newSong)
+            //return in the controller ad the services always the new json object
+            appendToSongsTable(res.branch)
             clearForm()
         },
         error: function (res) {
@@ -129,21 +135,41 @@ function createSong() {
     });
 }
 
-function updateSong(songId) {
-    const rating = $(`#song-${songId} #newRating #newRatingInput`).val()
+function updateBranch(branchId) {
+    const city = $("#city").val();
+    const address = $("#address").val();
+    const years = $("#years").val();
+    const open = $("#open").is(":checked");
+  
     const data = {
-        rating
-    }
+      city,
+      address,
+      years,
+      open
+    };
+  
     $.ajax({
-        type: "PUT",
-        url: URL + '/' + songId,
-        contentType: "application/json",
-        data: JSON.stringify(data),
-        error: function (res) {
-            alert(res.responseText)
-        }
+      type: "PUT",
+      url: URL + '/' + branchId,
+      contentType: "application/json",
+      data: JSON.stringify(data),
+      success: function (res) {
+        // Update the corresponding HTML element with the updated branch data
+        const updatedBranch = res.branch;
+        const $branchRow = $(`#branch-${branchId}`);
+        $branchRow.find(".city").text(updatedBranch.city);
+        $branchRow.find(".address").text(updatedBranch.address);
+        $branchRow.find(".years").text(updatedBranch.years);
+        $branchRow.find(".open").text(updatedBranch.open ? "Yes" : "No");
+      },
+      error: function (res) {
+        alert(res.responseText)
+      }
     });
 }
+  
+      
+
 
 // function appendToSongsTable(song) {
 //     const value = parseInt(song.rating)
