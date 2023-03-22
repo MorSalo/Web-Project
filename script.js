@@ -82,8 +82,7 @@ function read_all() {
         type: "GET",
         url: URL,
         success: function (res) {
-            res.
-            res.(appendToBranchTable)
+            res.branch.map(appendToBranchTable)
         },
         error: function (res) {
             alert(res.responseText)
