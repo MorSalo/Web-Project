@@ -1,0 +1,15 @@
+.container{
+    margin-left: 0% !important;
+}
+
+.body{
+    background-color: black;
+}
+
+footer{
+    margin-bottom: 0% !important;
+    text-align: left;
+    padding: 3px;
+    background-color: rgb(56, 57, 54);
+    color:white;
+}
