@@ -2,20 +2,22 @@ const Branch = require('../models/branches');
 
 //controller should check whether return branch or false 
 const createBranch = async (city2,address2,years2,open2) => {
-    if(doesExist(city2,address2,years2,open2) == false){
+    const find = await doesExist(city2,address2,years2,open2)
+    if(find == false){
         const branch = new Branch({
-            //_id:id2,
             city:city2,
             address:address2,
             years:years2,
             open:open2
         }); 
+        console.log(branch)
         return await branch.save()
     }
     else{
-        return false
+        const branch = new Branch({})
+        console.log("already exist")
+        return undefined
     }
-
 };
 
 const getBranchById = async (id) => {
@@ -26,12 +28,20 @@ const getBranches = async () => {
     return await Branch.find({});
 };
 
-const doesExist = async (city2,address2,years2,open2) => {
-   if(Branch.findOne({city:city2,address:address2,years:years2,open:open2})==undefined){
-        return false
+const doesExist = async (city2, address2, years2, open2) => {
+    const find = await Branch.findOne({
+      city: city2,
+      address: address2,
+      years: years2,
+      open: open2
+    });
+    if (!find) {
+      return false;
+    } else {
+      return true;
     }
-    else return true 
 };
+  
 
 const updateBranch = async (id2,city2,address2,years2,open2) => {
     const branch = await getBranchById(id2);
@@ -54,7 +64,7 @@ const updateBranch = async (id2,city2,address2,years2,open2) => {
 };
 
 const deleteBranch = async (id) => {
-    const branch = await getBarnchById(id);
+    const branch = await getBranchById(id);
     if (!branch)
         return false;
 

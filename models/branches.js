@@ -2,10 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const Branch = new Schema({
-    // _id:{
-    //     type:String,
-    //     required:true
-    // },
     city: {
         type: String,
         required: true
@@ -22,7 +18,6 @@ const Branch = new Schema({
         type:Boolean,
         required:true
     }
-
 });
 
 

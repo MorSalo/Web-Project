@@ -1,5 +1,4 @@
 const URL = "http://localhost:3000/branches"
-const branchesController = require('../module/branches');
 $(document).ready(function () {
     read_all()
 })
@@ -85,7 +84,8 @@ function read_all() {
         dataType: "json",
         success: function (res) {
             //not sure that it will work bc i work with shcema an d not array
-            res.branch.forEach(appendToBranchTable)
+            res.forEach(appendToBranchTable)
+
             //appendToBranchTable(res.bra)
             
         },
@@ -96,10 +96,12 @@ function read_all() {
 }
 
 function deleteBranch(branchId) {
+    
     $.ajax({
         type: "DELETE",
         url: URL + '/' + branchId,
         success: function () {
+
             $(`#branch-${branchId}`).remove()
         },
         error: function (res) {
@@ -194,6 +196,7 @@ function updateBranch(branchId) {
 // }
 
 function appendToBranchTable(branch) {
+
     const branchData = document.getElementById("branch-data");
 
     const row = document.createElement("tr");
