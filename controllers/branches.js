@@ -26,24 +26,25 @@ const getBranchById = async (req, res) => {
 
 const updateBranch = async (req, res) => {
   //do we have what we need?
-  if (!req.params._id) {
+  const {id} = req.params
+  if (!id) {
     res.status(400).json({
-    message: " id required",
+    message: "id required",
     });
   }
   
-  var {address,city,years,open} = req.body;
-  const branch = await branchesService.updateBranch(req.params._id,address,city,years,open);
-  if (!branch) {
+  var {city,address,years,open} = req.body;
+  const branch = await branchesService.updateBranch(id,city,address,years,open);
+  if (branch == undefined) {
     return res.status(404).json({ errors: ['Branch not found or already exist'] });
   }
-  
-  res.json(branch);
+  else res.json(branch);
 };
 
 const deleteBranch = async (req, res) => {
-  console.log(req.params._id)
-  const branch = await branchesService.deleteBranch(req.params._id);
+  const {id} = req.params;
+  console.log("controllers delete id:"+id)
+  const branch = await branchesService.deleteBranch(id);
   if (!branch) {
     return res.status(404).json({ errors: ['Branch not found'] });
   }
