@@ -24,49 +24,7 @@ fetch("/branches")
   .then(response => response.json())
   .then(data => {
     data.forEach(appendToBranchTable)
-    //branch => {
-
-    //     //appendToBranchTable(branch)
-
-    //   const row = document.createElement("tr");
-
-    //   const IdCell = document.createElement("td");
-    //   IdCell.textContent = branch._id;
-    //   row.appendChild(IdCell);
-      
-    //   const cityCell = document.createElement("td");
-    //   cityCell.textContent = branch.city;
-    //   row.appendChild(cityCell);
-
-    //   const addressCell = document.createElement("td");
-    //   addressCell.textContent = branch.address;
-    //   row.appendChild(addressCell);
-
-    //   const yearsCell = document.createElement("td");
-    //   yearsCell.textContent = branch.years;
-    //   row.appendChild(yearsCell);
-
-    //   const openCell = document.createElement("td");
-    //   openCell.textContent = branch.open;
-    //   row.appendChild(openCell);
-
-    //   branchData.appendChild(row);
-    // });
   });
-
-    // const showBranchBtn = document.getElementById("showButton");
-    // const songBranch = document.getElementById("branch-list");
-    // const 
-    // for (const branch of branchesController.branch) {
-    //     const songItem = document.createElement("li");
-    //     songItem.innerHTML = `
-    //     <b>Title:</b> ${song.title} <br>
-    //     <b>Author:</b> ${song.author} <br>
-    //     <b>Length:</b> ${song.length}
-    //     <b>Rate:</b> ${song.rate} seconds
-    //     `;
-    //     songList.appendChild(songItem);
-    // }
 })
 
 function clearForm() {
@@ -127,7 +85,8 @@ function createBranch() {
         data: JSON.stringify(data),
         success: function (res) {
             //return in the controller ad the services always the new json object
-            appendToSongsTable(res.branch)
+            console.log(res.branch)
+            appendToBranchTable(res.branch)
             clearForm()
         },
         error: function (res) {
@@ -159,17 +118,16 @@ function updateBranch(branchId) {
       data: JSON.stringify(data),
       success: function (res) {
         // Update the corresponding HTML element with the updated branch data
-        console.dir(res)
-        console.log("the response we got is(res.branch): " + res);
-
-        const updatedBranch = res.branch;
-        console.log("updated branch:" + updatedBranch)
-        const $branchRow = $(`#${branchId}`);
-        $branchRow.find(".city").text(updatedBranch.city);
-        $branchRow.find(".address").text(updatedBranch.address);
-        $branchRow.find(".years").text(updatedBranch.years);
-        $branchRow.find(".open").text(updatedBranch.open ? "Yes" : "No");
-        
+        // const updatedBranch = res.branch;
+        // console.log("updated branch:" + updatedBranch)
+        // const $branchRow = $(`#${branchId}`);
+        // $branchRow.find(".city").text(updatedBranch.city);
+        // $branchRow.find(".address").text(updatedBranch.address);
+        // $branchRow.find(".years").text(updatedBranch.years);
+        // $branchRow.find(".open").text(updatedBranch.open ? "Yes" : "No");
+        $(`#${branchId}`).remove()
+        appendToBranchTable(res.branch)
+        clearForm()
       },
       error: function (res) {
         alert(res.responseText)
@@ -177,31 +135,6 @@ function updateBranch(branchId) {
     });
 }
   
-      
-
-
-// function appendToSongsTable(song) {
-//     const value = parseInt(song.rating)
-//     $("#songsTable > tbody:last-child").append(`
-//         <tr id="song-${song.id}">
-//             <td name="id">${song.id}</td>
-//             <td name="name">${song.name}</td>
-//             <td name="author">${song.author}</td>
-//             <td id="newRating">
-//             <input type="number" id="newRatingInput" value=${value} min="0"/>
-//             </td>
-//             <td name="haveVideo">${song.haveVideo}</td>
-//             <td name="published">${song.published}</td>
-//             <td>
-//                 <button id="updateButton" class="btn btn-update" onclick="updateSong(${song.id})">UPDATE</button>
-//             </td>
-//             <td>
-//                 <button id="deleteButton" class="btn btn-delete" onclick="deleteSong(${song.id})">DELETE</button>
-//             </td>
-//         </tr>
-//     `);
-// }
-
 function appendToBranchTable(branch) {
 
     const branchData = document.getElementById("branch-data");
