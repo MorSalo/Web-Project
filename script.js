@@ -2,7 +2,6 @@ const URL = "http://localhost:3000/branches"
 $(document).ready(function () {
     read_all()
 })
-
 $("#addButton").click(function (e) {
     e.preventDefault()
     createBranch()
@@ -10,9 +9,10 @@ $("#addButton").click(function (e) {
 //TODO: I need to figure out how to take the id o the song without showing it on the doc
 $("#deleteButton").click(function (e) {
     e.preventDefault()
+    console.log("button on click delete "+$("#Id").val())
     deleteBranch($("#Id").val())
 })
-$("#updatebutton").click(function (e) {
+$("#updateButton").click(function (e) {
     e.preventDefault()
     updateBranch($("#Id").val())
 })
@@ -24,7 +24,7 @@ fetch("/branches")
   .then(response => response.json())
   .then(data => {
     data.forEach(appendToBranchTable)
-        //branch => {
+    //branch => {
 
     //     //appendToBranchTable(branch)
 
@@ -96,13 +96,12 @@ function read_all() {
 }
 
 function deleteBranch(branchId) {
-    
+    console.log("script delete:"+branchId)
     $.ajax({
         type: "DELETE",
         url: URL + '/' + branchId,
         success: function () {
-
-            $(`#branch-${branchId}`).remove()
+            $(`#${branchId}`).remove()
         },
         error: function (res) {
             alert(res.responseText)
@@ -138,6 +137,7 @@ function createBranch() {
 }
 
 function updateBranch(branchId) {
+    console.log("update branch:"+branchId)
     const city = $("#city").val();
     const address = $("#address").val();
     const years = $("#years").val();
@@ -149,6 +149,8 @@ function updateBranch(branchId) {
       years,
       open
     };
+
+    console.log(data)
   
     $.ajax({
       type: "PUT",
@@ -157,12 +159,17 @@ function updateBranch(branchId) {
       data: JSON.stringify(data),
       success: function (res) {
         // Update the corresponding HTML element with the updated branch data
+        console.dir(res)
+        console.log("the response we got is(res.branch): " + res);
+
         const updatedBranch = res.branch;
-        const $branchRow = $(`#branch-${branchId}`);
+        console.log("updated branch:" + updatedBranch)
+        const $branchRow = $(`#${branchId}`);
         $branchRow.find(".city").text(updatedBranch.city);
         $branchRow.find(".address").text(updatedBranch.address);
         $branchRow.find(".years").text(updatedBranch.years);
         $branchRow.find(".open").text(updatedBranch.open ? "Yes" : "No");
+        
       },
       error: function (res) {
         alert(res.responseText)
@@ -200,6 +207,8 @@ function appendToBranchTable(branch) {
     const branchData = document.getElementById("branch-data");
 
     const row = document.createElement("tr");
+
+    row.setAttribute("id",branch._id)
 
     const IdCell = document.createElement("td");
     IdCell.textContent = branch._id;
