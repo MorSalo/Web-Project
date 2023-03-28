@@ -63,7 +63,7 @@ const updateBranch = async (id2,city2,address2,years2,open2) => {
 
     const branch2 = await Branch.findByIdAndUpdate(id2, { city: city2, address: address2, years: years2, open: open2 }, {new: true})
     const branch = new Branch(branch2);
-    return branch.save();
+    return branch;
 };
 
 const deleteBranch = async (id) => {

@@ -2,12 +2,12 @@ const branchesService = require('../services/branches');
 
 const createBranch = async (req, res) => {
   var {city,address,years,open} = req.body;
-  const newBranch = await branchesService.createBranch(city,address,years,open);
-  console.log(newBranch);
-  if(newBranch == undefined){
+  const branch = await branchesService.createBranch(city,address,years,open);
+  console.log(branch);
+  if(branch == undefined){
     return res.status(404).json({ errors: ['Branch already exist'] });
   }
-  res.json(newBranch);
+  res.json({branch})
 };
 
 const getBranches = async (req, res) => {
@@ -38,7 +38,7 @@ const updateBranch = async (req, res) => {
   if (branch == undefined) {
     return res.status(404).json({ errors: ['Branch not found or already exist'] });
   }
-  else res.json(branch);
+  else res.json({branch});
 };
 
 const deleteBranch = async (req, res) => {
