@@ -78,10 +78,55 @@ const deleteBranch = async (id) => {
     else return true;
 };
 
+const findBranch = async (city2,years2,open2) => {
+    console.log("Services: the params we got from the controller are: "+ "city= "+city2+" years= "+years2+" open= "+open2)
+    //everything
+    if(city2 != undefined && years2 != undefined && open2 != undefined){
+        const ret =Branch.find({city:city2,years:years2,open:open2})
+        return ret
+    }
+    //city years
+    else if(city2 != undefined && years2 != undefined && open2 == undefined){
+        const ret =Branch.find({city:city2,years:years2})
+        return ret
+    }
+    //city open
+    else if(city2 != undefined && years2 == undefined && open2 != undefined){
+        const ret =Branch.find({city:city2,open:open2})
+        return ret
+    }
+    //years open
+    else if(city2 == undefined && years2 != undefined && open2 != undefined){
+        const ret =Branch.find({years:years2,open:open2})
+        return ret
+    }
+    //city
+    else if(city2 != undefined && years2 == undefined && open2 == undefined){
+        const ret =Branch.find({city:city2})
+        return ret
+    }
+    //years
+    else if(city2 == undefined && years2 != undefined && open2 == undefined){
+        const ret =Branch.find({years:years2})
+        return ret
+    }
+    //open
+    else if(city2 == undefined && years2 == undefined && open2 != undefined){
+        const ret =Branch.find({open:open2})
+        return ret
+    }
+    //nothing
+    else if(city2 == undefined && years2 == undefined && open2 == undefined){
+        return undefined
+    }
+    return undefined
+}
+
 module.exports = {
     createBranch,
     getBranchById,
     getBranches,
     updateBranch,
-    deleteBranch
+    deleteBranch,
+    findBranch
 }

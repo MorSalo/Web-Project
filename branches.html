@@ -3,6 +3,7 @@
 <div class="container">
     <div>
         <h3>Branches</h3>
+        <!-- branches table -->
         <table id="branchesTable">
             <thead>
                 <tr>
@@ -15,9 +16,10 @@
             </thead>
             <tbody id="branch-data"></tbody>
         </table>
-
+        <!-- input feilds -->
+        <h3>Inputs</h3>
         <div id="addBranch" class="addBranchSection">
-            <h2>Add new branch</h2>
+            <h2>Fields:</h2>
             <div>
                 <label for="Id">ID</label>
                 <input type="text" id="Id" class="form-control"/>
@@ -35,11 +37,34 @@
                 <input type="number" id="years" class="form-control" min="0"/>
             </div>
             <div>
-                <label for="length">Open</label>
+                <label for="open">Open</label>
                 <input type="checkbox" id="open" class="form-control"/>
             </div>
-
         </div>
+        <!-- find checkboxes -->
+        <h3>Find checkboxes</h3>
+        <div>
+            <span>
+                <label for="yearsCB">Years</label>
+                <input type="checkbox" id="yearsCB" class="form-control"/>
+            </span>
+            <span>
+                <label for="cityCB">City</label>
+                <input type="checkbox" id="cityCB" class="form-control"/>
+            </span>
+            <span>
+                <label for="openCB">Open</label>
+                <input type="checkbox" id="openCB" class="form-control"/>
+            </span>
+            <button type="button"
+            id="findButton"
+            class="btn btn-primary"
+            >
+                Find Branch
+            </button>
+        </div>
+        <!-- buttons -->
+        <h3>Buttons</h3>
         <div>
             <button type="button"
                     id="addButton"
