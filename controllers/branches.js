@@ -55,9 +55,10 @@ const deleteBranch = async (req, res) => {
 const findBranch = async (req,res) => {
   console.log("in the controller")
   const {city,years,open} = req.params
-  console.log("Controllers: the params we got from routs: "+"city= "+city+" years= "+years+" open= "+open)
+  console.log("Controllers: the params we got from routs: "+"city= "+city+" ,years= "+years+" ,open= "+open)
   const branches = await branchesService.findBranch(city,years,open);
   //should i return null object or error?
+  //is the if nessecery?
   if(branches == undefined){
     return res.json({branches})
     //return res.status(404).json({ errors: ['Branches not found'] });

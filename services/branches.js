@@ -79,7 +79,7 @@ const deleteBranch = async (id) => {
 };
 
 const findBranch = async (city2,years2,open2) => {
-    console.log("Services: the params we got from the controller are: "+ "city= "+city2+" years= "+years2+" open= "+open2)
+    console.log("Services: the params we got from the controller are: "+ "city= "+city2+" ,years= "+years2+" ,open= "+open2)
     //everything
     if(city2 != undefined && years2 != undefined && open2 != undefined){
         const ret =Branch.find({city:city2,years:years2,open:open2})
@@ -119,7 +119,7 @@ const findBranch = async (city2,years2,open2) => {
     else if(city2 == undefined && years2 == undefined && open2 == undefined){
         return undefined
     }
-    return undefined
+
 }
 
 module.exports = {
