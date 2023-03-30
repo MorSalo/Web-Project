@@ -22,6 +22,7 @@ $("#findButton").click(function (e){
 })
 $("#showButton").click(function(e){
     e.preventDefault()
+    clearTable()
     read_all()
 })
 
@@ -187,6 +188,8 @@ function appendToBranchTable(branch) {
 //find branches by criterias
 function findBranch() {
     var url2 = URL + "/";
+    //var url2 = URL + "/city/years/open?";
+
     var city = undefined;
     var years = undefined;
     var open = undefined;
@@ -194,28 +197,40 @@ function findBranch() {
     // var city = $("#city").val();
     // var years = $("#years").val();
     // var open = $("#open").is(":checked");
+
+    //replace ' ' to '-' and chech whether what we got is fine (is it a real city?years?address?) 
     const Iscity = $("#cityCB").is(":checked");
     if(Iscity == true){
-        var city = $("#city").val();
-        url2 += "city=" + city+"/"
+        city = $("#city").val();
+        //url2 += "city=" +city+"&"
+        url2 += "city/"+city+"/"
+    }else{
+        url2 += "city/"
     }
 
     const Isyears = $("#yearsCB").is(":checked");
     if(Isyears == true){
-        years = $("#years").val()
-        url2 += "years=" + years +"/"
+        years = $("#years").val();
+        //url2 += "years="+years+"&"
+
+        url2 += "years/"+years+"/"
+    }else{
+        url2 += "years/"
     }
 
     const Isopen = $("#openCB").is(":checked");
     if(Isopen == true){
-        open = $("#open").is(":checked")
-        url2 += "open=" + open+"/"
+        open = $("#open").is(":checked");
+        //url2 += "open="+open+"&"
+       url2 += "open/"+open
+    }else{
+        url2 += "open"
     }
-    //remove the last /
-    url2 = url2.substring(0, url2.length - 1);
+    //remove the last &
+    //url2 = url2.substring(0, url2.length - 1);
 
     console.log("url: " + url2)
-    console.log("years: "+years+"   city: "+city+"  open: "+open)
+    console.log("city: "+city+"   years: "+years+"  open: "+open)
 
     $.ajax({
         type: "GET",
@@ -228,7 +243,7 @@ function findBranch() {
             //and show the branches that answer the same criteria
             console.dir(res)
             if(res != undefined){
-                res.forEach(appendToBranchTable)   
+                res.branches.forEach(appendToBranchTable)   
             }       
         },
         error: function (res) {
@@ -244,7 +259,7 @@ function clearTable() {
     var rowCount = table.rows.length;
 
     // Loop through each row and remove it
-    for (var i = rowCount - 1; i > 0; i--) {
+    for (var i = rowCount - 1; i >= 0; i--) {
       table.deleteRow(i);
     }
 }
