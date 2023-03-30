@@ -1,0 +1,64 @@
+<html>
+<body>
+<div class="container">
+    <div>
+        <h3>SONGS</h3>
+        <table id="songsTable">
+            <tr>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Rating</th>
+                <th>Have video</th>
+                <th>Link</th>
+                <th>Published</th>
+            </tr>
+        </table>
+
+        <div id="addSong" class="addSongSection">
+            <h2>Add new song</h2>
+            <div>
+                <label for="name">Song Name</label>
+                <input type="text" id="name" class="form-control"/>
+            </div>
+            <div>
+                <label for="author">Author</label>
+                <input type="text" id="author" class="form-control"/>
+            </div>
+            <div>
+                <label for="rating">Rating</label>
+                <input type="number" id="rating" class="form-control" min="0"/>
+            </div>
+            <div>
+                <label for="haveVideo">Have video</label>
+                <input type="checkbox" id="haveVideo" class="form-control"/>
+            </div>
+            <div>
+                <label for="name">Song link</label>
+                <input type="text" id="link" class="form-control" disabled />
+            </div>
+        </div>
+        <div>
+            <button type="button"
+                    id="addButton"
+                    class="btn btn-primary"
+                    hidden
+            >
+                ADD
+            </button>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+<script type="text/javascript" src="Songsscript.js"></script>
+<script>
+    document.getElementById('haveVideo').onchange = function() {
+        document.getElementById('link').disabled = !this.checked;
+        $("#link").val('');
+
+    }  
+</script>
+<link rel="stylesheet" href="styles.css"/>
+</body>
+</html>
