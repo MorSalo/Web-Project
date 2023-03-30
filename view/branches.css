@@ -7,11 +7,13 @@
 /* #f7f7f7 */
 h1{
     padding-right: 10% !important;
+    background-color:#418df0 ;
 }
 
 h3 {
     margin-top: 20px;
 }
+
 
 /* Styles for Table */
 table {
