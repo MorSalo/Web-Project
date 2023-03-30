@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Branches</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="branches.css"/>
+  </head>
+  <body>
+    <div>
+      <a type="button" id="homeButton" href="file:///C:/Users/mor/Documents/ABA/WEB/Project/main.html">
+        <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="currentColor" class="bi bi-house" viewBox="0 0 16 16">
+          <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+        </svg>
+      </a>
+    </div>
+    <div class="container">
+      <div class="my-5">
+        <h1 class="text-center">Branches</h1>
+        <div class="row">
+          <div class="col-md-8">
+            <h3>Branches</h3>
+            <!-- branches table -->
+            <table id="branchesTable" class="table">
+              <thead>
+                <tr>
+                  <th>Id</th>
+                  <th>City</th>
+                  <th>Address</th>
+                  <th>Years</th>
+                  <th>Open</th>
+                </tr>    
+              </thead>
+              <tbody id="branch-data"></tbody>
+            </table>
+          </div>
+          <div class="col-md-4">
+            <!-- input fields -->
+            <h3>Inputs</h3>
+            <div id="addBranch" class="addBranchSection">
+              <form>
+                <div class="form-group">
+                  <label for="Id">ID</label>
+                  <input type="text" id="Id" class="form-control"/>
+                </div>
+                <div class="form-group">
+                  <label for="city">City</label>
+                  <input type="text" id="city" class="form-control"/>
+                </div>
+                <div class="form-group">
+                  <label for="address">Address</label>
+                  <input type="text" id="address" class="form-control"/>
+                </div>
+                <div class="form-group">
+                  <label for="years">Years</label>
+                  <input type="number" id="years" class="form-control" min="0"/>
+                </div>
+                <div class="form-group form-check">
+                  <input type="checkbox" id="open" class="form-check-input"/>
+                  <label class="form-check-label" for="open">Open</label>
+                </div>
+                <button type="button" id="addButton" class="btn btn-primary">Add Branch</button>
+                <button type="button" id="deleteButton" class="btn btn-danger">Delete Branch</button>
+                <button type="button" id="updateButton" class="btn btn-warning">Update Branch</button>
+                <button type="button" class="btn btn-info" id="showButton">Show Branches</button>
+              </form>
+            </div>
+          </div>
+        </div>
+        <hr>
+        <div class="row">
+          <div class="col-md-8">
+            <!-- find checkboxes -->
+            <h3>Find checkboxes</h3>
+            <form>
+              <div class="form-group form-check">
+                <input type="checkbox" id="cityCB" class="form-check-input"/>
+                <label class="form-check-label" for="cityCB">City</label>
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" id="yearsCB" class="form-check-input"/>
+                <label class="form-check-label" for="yearsCB">Years</label>
+              </div>
+              <div class="form-group form-check">
+                <input type="checkbox" id="openCB" class="form-check-input"/>
+                <label class="form-check-label" for="openCB">Open</label>
+              </div>
+              <button type="button" id="findButton" class="btn btn-primary">Find Branch</button>
+            </form>
+        </div>
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
+        <script type="text/javascript" src="branches.js"></script>
+      </body>
+      </html>
+      
