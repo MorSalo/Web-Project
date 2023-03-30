@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Facebook Login Example</title>
+	<!-- Include Facebook SDK -->
+	<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+	<script>
+      function statusChangeCallback(response) {  // Called with the results from FB.getLoginStatus().
+          console.log('statusChangeCallback');
+          console.log(response);                   // The current login status of the person.
+          if (response.status === 'connected') {   // Logged into your webpage and Facebook.
+            testAPI();  
+          } else {                                 // Not logged into your webpage or we are unable to tell.
+            document.getElementById('status').innerHTML = 'Please log ' +
+              'into this webpage.';
+          }
+        }
+
+        function checkLoginState() {               // Called when a person is finished with the Login Button.
+          FB.getLoginStatus(function(response) {   // See the onlogin handler
+            statusChangeCallback(response);
+          });
+        }
+
+		// Initialize Facebook SDK
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '767253277997127',
+				cookie     : true,
+				xfbml      : true,
+				version    : 'v16.0'
+			});
+		};
+
+    
+		
+		// Load Facebook SDK asynchronously
+		(function(d, s, id) {
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) return;
+			js = d.createElement(s); js.id = id;
+			js.src = "https://connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+		
+		// Handle Facebook login button click
+		function loginWithFacebook() {
+			FB.login(function(response) {
+				if (response.authResponse) {
+					console.log('You are now logged in with Facebook.');
+					// Redirect to a page or do something else after successful login
+				} else {
+					console.log('Facebook login failed.');
+				}
+			});
+		}
+	</script>
+</head>
+<body>
+	<!-- Facebook login button -->
+	<button onclick="loginWithFacebook()">Log in with Facebook</button>
+</body>
+</html>
