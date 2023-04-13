@@ -4,6 +4,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser')
 const songs = require('./routes/songs');
 const users = require('./routes/users');
+const branches = require('./routes/branches');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const http = require('http');
@@ -43,6 +44,7 @@ app.get('/Home', authenticateToken, (req, res) => {
 
 app.use('/songs', songs);
 app.use('/users' ,users);
+app.use('/branches' ,branches);
 app.set('socketio', io);
 server.listen(3000, function () {
     console.log('listening on 3000')

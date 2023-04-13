@@ -51,7 +51,7 @@ function clearForm() {
 function read_all() {
     $.ajax({
         type: "GET",
-        url: URL,
+        url: URL+"/",
         dataType: "json",
         success: function (res) {
             //not sure that it will work bc i work with shcema an d not array

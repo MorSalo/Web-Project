@@ -10,7 +10,8 @@ const getSongs = async (req, res) => {
 
 const createSong = async (req, res) => {
     const {name, author, rating, haveVideo, link} = req.body
-    await validateSongRequest(req, res)
+    if( await validateSongRequest(req, res)!=1)
+        return;
     const newSong = new Songs({
         name,
         author,
@@ -18,13 +19,11 @@ const createSong = async (req, res) => {
         haveVideo,
         link
     })
-
     await newSong.save().catch(e => console.log(e))
     const io = req.app.get('socketio');
     io.emit('new-song', {
         song: newSong
     });
-    
     res.json({
         newSong
     })
@@ -46,7 +45,7 @@ async function validateSongRequest(req, res) {
     if (dbsong) {
         return res.status(404).json({errors: ['Song already exists']});
     }
-
+    return 1;
 }
 
 const updateSong = async (req, res) => {
@@ -79,7 +78,6 @@ const deleteSong = async (req, res) => {
     }
 
     await Songs.deleteOne({_id: id})
-    res.send('Song deleted!');
     const io = req.app.get('socketio');
     io.emit('deleted-song', {
         song: deleted_song
@@ -90,9 +88,61 @@ const deleteSong = async (req, res) => {
     })
 }
 
+const findSongs = async (req,res) => {
+    console.log("in the controller")
+    const {name,author,haveVideo} = req.params
+    console.log("Controllers: the params we got from routs: "+"name= "+name+" ,author= "+author+" ,haveVideo= "+haveVideo);
+    const songs = await findAllSongs(name,author,haveVideo);
+    if(songs == undefined){
+      return res.json({songs})
+    }
+    res.json({songs});
+  }
+const findAllSongs = async (name2,author2,haveVideo2) => {
+    console.log("Services: the params we got from the controller are: "+ "name= "+name2+" ,author= "+author2+" ,haveVideo= "+haveVideo2)
+    if(name2 != undefined && author2 != undefined && haveVideo2 != undefined){
+        const ret =Songs.find({name:name2,author:author2,haveVideo:haveVideo2})
+        return ret
+    }
+    //name author
+    else if(name2 != undefined && author2 != undefined && haveVideo2 == undefined){
+        const ret =Songs.find({name:name2,author:author2})
+        return ret
+    }
+    //name haveVideo
+    else if(name2 != undefined && author2 == undefined && haveVideo2 != undefined){
+        const ret =Songs.find({name:name2,haveVideo:haveVideo2})
+        return ret
+    }
+    //author haveVideo
+    else if(name2 == undefined && author2 != undefined && haveVideo2 != undefined){
+        const ret =Songs.find({author:author2,haveVideo:haveVideo2})
+        return ret
+    }
+    //name
+    else if(name2 != undefined && author2 == undefined && haveVideo2 == undefined){
+        const ret =Songs.find({name:name2})
+        return ret
+    }
+    //author
+    else if(name2 == undefined && author2 != undefined && haveVideo2 == undefined){
+        const ret =Songs.find({author:author2})
+        return ret
+    }
+    //haveVideo
+    else if(name2 == undefined && author2 == undefined && haveVideo2 != undefined){
+        const ret =Songs.find({haveVideo:haveVideo2})
+        return ret
+    }
+    //nothing
+    else if(name2 == undefined && author2 == undefined && haveVideo2 == undefined){
+        return undefined
+    }
+}
 module.exports = {
     getSongs,
     createSong,
     updateSong,
-    deleteSong
+    deleteSong,
+    findSongs
 };

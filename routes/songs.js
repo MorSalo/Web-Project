@@ -8,6 +8,7 @@ router.route('/')
 
 router.route('/:id')
     .put(songsController.updateSong)
-    .delete(songsController.deleteSong)
-
+    .delete(songsController.deleteSong);
+router.route('/name/:name?/author/:author?/haveVideo/:haveVideo?')
+    .get(songsController.findSongs);
 module.exports = router;

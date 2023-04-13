@@ -2,16 +2,24 @@
 <body>
 <div class="container">
     <div>
+        <a type="button" id="homeButton" href="../main/main.html">
+          <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" fill="white" class="bi bi-house" viewBox="0 0 16 16">
+            <path d="M8.707 1.5a1 1 0 0 0-1.414 0L.646 8.146a.5.5 0 0 0 .708.708L2 8.207V13.5A1.5 1.5 0 0 0 3.5 15h9a1.5 1.5 0 0 0 1.5-1.5V8.207l.646.647a.5.5 0 0 0 .708-.708L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.707 1.5ZM13 7.207V13.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V7.207l5-5 5 5Z"/>
+          </svg>
+        </a>
+      </div>
+    <div>
         <h3>SONGS</h3>
         <table id="songsTable">
             <tr>
                 <th>Name</th>
                 <th>Author</th>
                 <th>Rating</th>
-                <th>Have video</th>
+                <th>Have Video</th>
                 <th>Link</th>
                 <th>Published</th>
             </tr>
+            <tbody id="song-data"></tbody>
         </table>
 
         <div id="addSong" class="addSongSection">
@@ -38,27 +46,44 @@
             </div>
         </div>
         <div>
-            <button type="button"
-                    id="addButton"
-                    class="btn btn-primary"
-                    hidden
-            >
-                ADD
-            </button>
+            <button type="button" id="findButton" class="btn btn-primary">Search Songs</button>
+            <button type="button" id="clearButton" class="btn btn-primary">Clear Songs</button>
+            <button type="button" id="showButton" class="btn btn-primary">Show All Songs</button>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+              <h3>Check The Parameters For The Search</h3>
+              <form>
+                <div class="form-group form-check">
+                  <input type="checkbox" id="nameCB" class="form-check-input"/>
+                  <label class="form-check-label" for="nameCB">Name</label>
+                </div>
+                <div class="form-group form-check">
+                  <input type="checkbox" id="authorCB" class="form-check-input"/>
+                  <label class="form-check-label" for="authorCB">Author</label>
+                </div>
+                <div class="form-group form-check">
+                    <input type="checkbox" id="haveVideoCB" class="form-check-input"/>
+                    <label class="form-check-label" for="haveVideoCB">Have Video</label>
+                </div>
+              </form>
+          </div>
         </div>
     </div>
 </div>
 <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script type="text/javascript" src="Songsscript.js"></script>
+<script type="text/javascript" src="SongsUserscript.js"></script>
 <script>
     document.getElementById('haveVideo').onchange = function() {
         document.getElementById('link').disabled = !this.checked;
         $("#link").val('');
-
     }  
+    document.getElementById('haveVideoCB').onchange = function() {
+        document.getElementById('linkCB').disabled = !this.checked;
+    }
 </script>
-<link rel="stylesheet" href="/view/styles.css"/>
+<link rel="stylesheet" href="SongsUser.css"/>
 </body>
 </html>
