@@ -18,10 +18,16 @@ function logIn()
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function (res) {
-            const {user} = res
             localStorage.setItem('token', res.token);
+            const {isAdmin} = res.isAdmin;
             console.log('innnnn')
-            window.location.href = 'HomePage.html';
+            if(isAdmin){
+                window.location.href = '../main/main.html';
+            }
+            else
+            {
+                window.location.href = '../main/mainUser.html';
+            }
         },
         error: function (res) {
             alert(res.responseText)
