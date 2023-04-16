@@ -19,9 +19,8 @@ function logIn()
         data: JSON.stringify(data),
         success: function (res) {
             localStorage.setItem('token', res.token);
-            const {isAdmin} = res.isAdmin;
             console.log('innnnn')
-            if(isAdmin){
+            if(res.isAdmin){
                 window.location.href = '../main/main.html';
             }
             else

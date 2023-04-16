@@ -7,9 +7,16 @@
 }
 
 footer{
-    margin-bottom: 0% !important;
-    text-align: left;
-    padding: 3px;
+    /* margin-bottom: 0% !important;
+     text-align: left; 
+    padding: 3px; */
     background-color: rgb(56, 57, 54);
     color:white;
+    position: fixed;
+    margin-top: 2%;
+    height: 50;
+    width: 100%;
+    text-align: left;
+    font-size: 0.8em;
+    bottom: 0;
 }
