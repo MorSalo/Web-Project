@@ -97,7 +97,8 @@ const validateUser = async (req, res) => {
 
     }
     const token = jwt.sign({ sub: user.id }, process.env.JWT_SECRET_KEY);
-    res.json({ token });
+    const isAdmin = user.isAdmin;
+    res.json({ token, isAdmin});
   };
 
   const getUser = async (req,res) => {
