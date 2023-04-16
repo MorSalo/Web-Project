@@ -198,19 +198,19 @@ function appendToSongsTable(song) {
     $("#songsTable > tbody:last-child").append(`
         <tr id="song-${song._id}">
         <td id="newName">
-        <input type="string" id="newNameInput" value=${nameValue}>
+        <input type="string" id="newNameInput" value="${nameValue}">
         </td>
         <td id="newAuthor">
-        <input type="string" id="newAuthorInput" value=${authorValue}>
+        <input type="string" id="newAuthorInput" value="${authorValue}">
         </td>
         <td id="newRating">
-        <input type="number" id="newRatingInput" value=${ratingValue} min="0"/>
+        <input type="number" id="newRatingInput" value="${ratingValue}" min="0" max="5"/>
         </td>
         <td id="newHaveVideo">
         <input type="checkbox" id="newHaveVideoInput" ${haveVideoValue}>
         </td>
         <td id="newLink">
-        <input type="string" id="newLinkInput" value=${linkValue}>
+        <input type="string" id="newLinkInput" value="${linkValue}" >
         </td>
         <td name="published">${song.published}</td>
         <td>

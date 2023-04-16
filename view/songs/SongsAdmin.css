@@ -44,3 +44,7 @@ h2 {
 .addSongSection{
     padding-top: 40px;
 }
+
+input [type=text]{
+    padding: 0%;
+}
