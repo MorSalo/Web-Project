@@ -20,6 +20,7 @@ function createUser() {
         data: JSON.stringify(data),
         success: function (res) {
             clearUserForm()
+            window.location.href = '../users/LogIn.html';
         },
         error: function (res) {
             alert(res.responseText)
