@@ -7,6 +7,10 @@ $(document).ready(function () {
     socket.on("deleted-song", (res) => {
         console.log("should be deleted");
         $(`#song-${res.song._id}`).remove();
+    })
+    socket.on("updated-song", (res) => {
+        $(`#song-${res.song._id}`).remove();
+        appendToSongsTable(res.song)
     });
     read_all()
 })

@@ -60,8 +60,12 @@ const updateSong = async (req, res) => {
     }
 
     await Songs.updateOne({_id: id}, {name, author, rating, haveVideo, link})
-
+    const updatedSong = await Songs.findOne({name, author, rating, haveVideo, link});
     const songs = await Songs.find()
+    const io = req.app.get('socketio');
+    io.emit('updated-song', {
+        song: updatedSong
+    });
     res.json({
         songs,
         message: 'Song updated!'
