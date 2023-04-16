@@ -177,16 +177,12 @@ function findSongs()
 }
 function clearTable()
 {
-    $.ajax({
-        type: "GET",
-        url: URL,
-        success: function (res) {
-            res.songs.map(song => $(`#song-${song._id}`).remove());
-        },
-        error: function (res) {
-            alert(res.responseText)
-        }
-    });
+    var table = document.getElementById("songsTable");
+    var rowCount = table.rows.length;
+
+    for (var i = rowCount - 1; i >= 1; i--) {
+      table.deleteRow(i);
+    }
 }
 function appendToSongsTable(song) {
     const ratingValue = parseInt(song.rating)
@@ -198,19 +194,19 @@ function appendToSongsTable(song) {
     $("#songsTable > tbody:last-child").append(`
         <tr id="song-${song._id}">
         <td id="newName">
-        <input type="string" id="newNameInput" value=${nameValue}>
+        <input type="string" id="newNameInput" value="${nameValue}">
         </td>
         <td id="newAuthor">
-        <input type="string" id="newAuthorInput" value=${authorValue}>
+        <input type="string" id="newAuthorInput" value="${authorValue}">
         </td>
         <td id="newRating">
-        <input type="number" id="newRatingInput" value=${ratingValue} min="0"/>
+        <input type="number" id="newRatingInput" value="${ratingValue}" min="0" max="5"/>
         </td>
         <td id="newHaveVideo">
         <input type="checkbox" id="newHaveVideoInput" ${haveVideoValue}>
         </td>
         <td id="newLink">
-        <input type="string" id="newLinkInput" value=${linkValue}>
+        <input type="string" id="newLinkInput" value="${linkValue}" >
         </td>
         <td name="published">${song.published}</td>
         <td>
@@ -222,60 +218,5 @@ function appendToSongsTable(song) {
         </tr>
     `);
     
-}
-function createTrTag(song) {
-    var tr = document.createElement("tr");
-
-    tr.id = `song-${song._id}`;
-    tr.appendChild(document.createElement("td").append(createInputTag(song.name)));
-    tr.appendChild(createInputTag(song.author));
-    tr.appendChild(createInputNumberTag(song.rating));
-    tr.appendChild(createInputTextBoxTag(song.haveVideo));
-    tr.appendChild(createInputTag(song.link));
-    tr.appendChild(createInputTag(song.published));
-    tr.appendChild(createButton("updateButton",song));
-    tr.appendChild(createButton("deleteButton",song));
-    return tr;
-    
-}
-function createInputTag(param) {
-    var InputTag = document.createElement("input");
-    InputTag.value = param;
-    return InputTag;
-  }
-function createInputNumberTag(param) {
-    var InputTag = document.createElement("input");
-    InputTag.type = "number";
-    InputTag.value = param;
-    return InputTag;
-  }
-function createInputTextBoxTag(param) {
-    var InputTag = document.createElement("input");
-    InputTag.type = "checkbox";
-    InputTag.checked = param;
-    return InputTag;
-  }
-  function createTD(param) {
-    var td = document.createElement("td");
-    td.name = "published";
-    td.value = param;
-    return td;
-  }
-function createButton(id,song)
-{
-    var button = document.createElement("td");
-    button.id = id;
-    button.class = "btn btn-update";
-    if(id=="updateButton")
-    {
-        button.onclick = updateSong('${songId}');
-        button.value = "UPDATE";
-    }
-    else if(id=="deleteButton")
-    {
-        button.onclick = deleteSong('${songId}');
-        button.value = "DELETE";
-    }
-    return button;
 }
 
