@@ -13,5 +13,6 @@ router.route('/:id')
 
 router.route('/auth')
 .post(usersController.validateUser)
-
+router.route('/username/:username?/email/:email?/isAdmin/:isAdmin?')
+    .get(usersController.findUsers);
 module.exports = router;

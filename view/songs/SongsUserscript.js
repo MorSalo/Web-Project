@@ -128,14 +128,10 @@ function findSongs()
 }
 function clearTable()
 {
-    $.ajax({
-        type: "GET",
-        url: URL,
-        success: function (res) {
-            res.songs.map(song => $(`#song-${song._id}`).remove());
-        },
-        error: function (res) {
-            alert(res.responseText)
-        }
-    });
+    var table = document.getElementById("songsTable");
+    var rowCount = table.rows.length;
+
+    for (var i = rowCount - 1; i >= 1; i--) {
+      table.deleteRow(i);
+    }
 }
