@@ -1,17 +1,17 @@
+//const { ready } = require("jquery")
+
 const URL = "http://localhost:3000/branches"
 
 $(document).ready(function () {
-    read_all()
     initMap()
+    read_all()
 })
 $("#addButton").click(function (e) {
     e.preventDefault()
     createBranch()
 })
-//TODO: I need to figure out how to take the id o the song without showing it on the doc
 $("#deleteButton").click(function (e) {
     e.preventDefault()
-    console.log("button on click delete "+$("#Id").val())
     deleteBranch($("#Id").val())
 })
 $("#updateButton").click(function (e) {
@@ -25,6 +25,7 @@ $("#findButton").click(function (e){
 $("#showButton").click(function(e){
     e.preventDefault()
     clearTable()
+    deleteMarkers()
     read_all()
 })
 
@@ -57,8 +58,9 @@ function read_all() {
         dataType: "json",
         success: function (res) {
             //not sure that it will work bc i work with shcema an d not array
+            clearTable()
             res.forEach(appendToBranchTable)
-
+            res.forEach(addMarker)
             //appendToBranchTable(res.bra)
             
         },
@@ -76,6 +78,8 @@ function deleteBranch(branchId) {
         url: URL + '/' + branchId,
         success: function () {
             $(`#${branchId}`).remove()
+            deleteMarkers()
+            read_all()
         },
         error: function (res) {
             alert(res.responseText)
@@ -105,7 +109,9 @@ function createBranch() {
             console.log(res.branch)
             appendToBranchTable(res.branch)
             clearForm()
-            addMarker(address)
+
+            deleteMarkers()
+            read_all()
         },
         error: function (res) {
             alert(res.responseText)
@@ -147,6 +153,10 @@ function updateBranch(branchId) {
         $(`#${branchId}`).remove()
         appendToBranchTable(res.branch)
         clearForm()
+
+        deleteMarkers()
+        read_all()
+
       },
       error: function (res) {
         alert(res.responseText)
@@ -267,77 +277,19 @@ function clearTable() {
     }
 }
 
-
+////////////////////////////////////////////////////////////////////////////////////////
 // //GOOGLE MAPS
+///////////////////////////////////////////////////////////////////////////////////////
 
-// // create a Google Maps client object
-// const googleMapsClient = googleMaps.createClient({
-//     key: 'AIzaSyAmyYbtYgcRefWKgOV6K4SrvGq4hXvEA4k'
-//   });
-  
-//   // create a map object
-//   const map = new google.maps.Map(document.getElementById('map'), {
-//     center: { lat: 100, lng: 0 },
-//     zoom: 2
-//   });
-  
-//   // retrieve the branch information and create markers for each location
-//   fetch('/branches')
-//     .then(response => response.json())
-//     .then(data => {
-//       data.forEach(branch => {
-//         const marker = new google.maps.Marker({
-//           position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
-//           map: map,
-//           title: branch.name
-//         });
-//       });
-//     })
-//     .catch(error => console.error(error));
-
-//     function addBranchMap() {
-//         $.ajax({
-//             type: "GET",
-//             url: URL + '/',
-//             success: function () {
-//                 data.forEach(branch => {
-//                     const marker = new google.maps.Marker({
-//                       position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
-//                       map: map,
-//                       title: branch.name
-//                     });
-//                 });
-//             },
-//             error: function (res) {
-//                 alert(res.responseText)
-//             }
-//         });
-//     }
-    
-  
-//   // add an event listener to the map that listens for changes in the branch information
-//   const branchUpdateEventSource = new EventSource('/branch-updates');
-//   branchUpdateEventSource.addEventListener('update', event => {
-//     const branch = JSON.parse(event.data);
-//     const marker = new google.maps.Marker({
-//       position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
-//       map: map,
-//       title: branch.name
-//     });
-//   });
-
-
-//window.initMap = initMap;
+let map;
+let markers = [];
+let geocoder;
 
 // Initialize and add the map
-let map;
-let markers;
-
 async function initMap() {
   // The location of the collage    31.970557137683475, 34.772830115344256
   const position = { lat: 31.970557137683475, lng: 34.772830115344256 };
   // Request needed libraries.
-  //@ts-ignore
   const { Map } = await google.maps.importLibrary("maps");
   const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
 
@@ -347,40 +299,65 @@ async function initMap() {
     center: position,
   });
 
-  // The marker, positioned at the collage
-  const marker = new google.maps.Marker({
-    map: map,
-    position: position,
-    title: "College Of Management",
-  });
-  marker.setMap(map)
+//   // The marker, positioned at the collage
+//   const marker = new google.maps.Marker({
+//     map: map,
+//     position: position,
+//     title: "College Of Management",
+//   });
+//   markers.push(marker);
+//   marker.setMap(map)
 
-  //go over every address 
-  markers.forEach(a => {
-    let geocoder = new google.maps.Geocoder();
-
-    geocoder.geocode({'address': a}, function(results, status) {
-        new google.maps.Marker({
-        //create marker on the map to each address
-        position: results[0].geometry.location,
-        map: map
-      });
-    });
- })
 }
 
-function addMarker(address) {
+function addMarker(branch) {
     //convert the address to position on the map
-    let geocoder = new google.maps.Geocoder();
 
-    let position = geocoder.geocode({'address': address});
+    console.log("in the add marker")
+    geocoder = new google.maps.Geocoder();
+    var address = branch.address + ", " + branch.city
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        console.log("in the geo")
 
-    const marker = new google.maps.Marker({
-      position,
-      map,
+        if (status == 'OK') {
+            console.log("ok")
+            var where = results[0].geometry.location;
+            console.log(where)
+          //map.setCenter(results[0].geometry.location);
+          var marker = new google.maps.Marker({
+              map: map,
+              position: where
+          });
+          marker.setMap(map);
+          markers.push(marker);
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
     });
+    // let position = geocoder.geocode({'address': address});
+
+    // const marker = new google.maps.Marker({
+    //   position,
+    //   map,
+    // });
   
-    markers.push(marker);
+    // markers.push(marker);
 }
 
+
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+}
+  
+function hideMarkers() {
+    setMapOnAll(null);
+}
+
+function deleteMarkers() {
+    hideMarkers();
+    markers = [];
+}
+  
 
