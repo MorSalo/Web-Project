@@ -1,6 +1,8 @@
 const URL = "http://localhost:3000/branches"
+
 $(document).ready(function () {
     read_all()
+    initMap()
 })
 $("#addButton").click(function (e) {
     e.preventDefault()
@@ -103,6 +105,7 @@ function createBranch() {
             console.log(res.branch)
             appendToBranchTable(res.branch)
             clearForm()
+            addMarker(address)
         },
         error: function (res) {
             alert(res.responseText)
@@ -250,8 +253,8 @@ function findBranch() {
             alert(res.responseText)
         }
     });
-
 }
+
 
 //clear the list of the branches
 function clearTable() {
@@ -262,6 +265,122 @@ function clearTable() {
     for (var i = rowCount - 1; i >= 0; i--) {
       table.deleteRow(i);
     }
+}
+
+
+// //GOOGLE MAPS
+
+// // create a Google Maps client object
+// const googleMapsClient = googleMaps.createClient({
+//     key: 'AIzaSyAmyYbtYgcRefWKgOV6K4SrvGq4hXvEA4k'
+//   });
+  
+//   // create a map object
+//   const map = new google.maps.Map(document.getElementById('map'), {
+//     center: { lat: 100, lng: 0 },
+//     zoom: 2
+//   });
+  
+//   // retrieve the branch information and create markers for each location
+//   fetch('/branches')
+//     .then(response => response.json())
+//     .then(data => {
+//       data.forEach(branch => {
+//         const marker = new google.maps.Marker({
+//           position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
+//           map: map,
+//           title: branch.name
+//         });
+//       });
+//     })
+//     .catch(error => console.error(error));
+
+//     function addBranchMap() {
+//         $.ajax({
+//             type: "GET",
+//             url: URL + '/',
+//             success: function () {
+//                 data.forEach(branch => {
+//                     const marker = new google.maps.Marker({
+//                       position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
+//                       map: map,
+//                       title: branch.name
+//                     });
+//                 });
+//             },
+//             error: function (res) {
+//                 alert(res.responseText)
+//             }
+//         });
+//     }
+    
+  
+//   // add an event listener to the map that listens for changes in the branch information
+//   const branchUpdateEventSource = new EventSource('/branch-updates');
+//   branchUpdateEventSource.addEventListener('update', event => {
+//     const branch = JSON.parse(event.data);
+//     const marker = new google.maps.Marker({
+//       position: { lat: branch.location.coordinates[1], lng: branch.location.coordinates[0] },
+//       map: map,
+//       title: branch.name
+//     });
+//   });
+
+
+//window.initMap = initMap;
+
+// Initialize and add the map
+let map;
+let markers;
+
+async function initMap() {
+  // The location of the collage    31.970557137683475, 34.772830115344256
+  const position = { lat: 31.970557137683475, lng: 34.772830115344256 };
+  // Request needed libraries.
+  //@ts-ignore
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+
+  // The map, centered at the collage
+  map = new Map(document.getElementById("map"), {
+    zoom: 10,
+    center: position,
+  });
+
+  // The marker, positioned at the collage
+  const marker = new google.maps.Marker({
+    map: map,
+    position: position,
+    title: "College Of Management",
+  });
+  marker.setMap(map)
+
+  //go over every address 
+  markers.forEach(a => {
+    let geocoder = new google.maps.Geocoder();
+
+    geocoder.geocode({'address': a}, function(results, status) {
+        new google.maps.Marker({
+        //create marker on the map to each address
+        position: results[0].geometry.location,
+        map: map
+      });
+    });
+ })
+}
+
+function addMarker(address) {
+    //convert the address to position on the map
+    let geocoder = new google.maps.Geocoder();
+
+    let position = geocoder.geocode({'address': address});
+
+    const marker = new google.maps.Marker({
+      position,
+      map,
+    });
+  
+    markers.push(marker);
 }
 
 
