@@ -13,4 +13,4 @@ $(document).ready(() => {
         window.location.href = '../users/LogIn.html';
       }
     });
-  })
+  });

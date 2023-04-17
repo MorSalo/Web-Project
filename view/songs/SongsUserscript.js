@@ -66,8 +66,18 @@ function appendToSongsTable(song) {
     haveVideoCell.textContent = song.haveVideo;
     row.appendChild(haveVideoCell);
 
-    const linkCell = document.createElement("td");
-    linkCell.textContent = song.link;
+    var linkCell = document.createElement("td");
+    var linkText = document.createElement("a");
+    if(song.link!="null"){
+        linkText.setAttribute('href',song.link);
+        linkText.text = "click here for video";
+        linkText.style.color = "#ff0000";  
+    }
+    else
+    {
+        linkText.text = song.link;
+    }
+    linkCell.appendChild(linkText);
     row.appendChild(linkCell);
 
     const publishedCell = document.createElement("td");
