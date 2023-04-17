@@ -81,7 +81,7 @@ function appendToSongsTable(song) {
     row.appendChild(linkCell);
 
     const publishedCell = document.createElement("td");
-    publishedCell.textContent = song.published;
+    publishedCell.textContent = song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/");;
     row.appendChild(publishedCell);
 
     songData.appendChild(row);
