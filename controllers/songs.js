@@ -51,7 +51,10 @@ async function validateSongRequest(req, res) {
 const updateSong = async (req, res) => {
     const {id} = req.params
     const {name, author, rating, haveVideo, link} = req.body
-    await validateSongRequest(req, res)
+    if(await validateSongRequest(req, res)!=1)
+    {
+        return;
+    }
 
     const song = await Songs.findById(id)
 

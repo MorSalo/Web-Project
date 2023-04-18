@@ -52,7 +52,10 @@ async function validateUserRequest(req, res) {
 const updateUser = async (req, res) => {
     const {id} = req.params
     const {username, email, password, isAdmin } = req.body
-    await validateUserRequest(req, res)
+    if(await validateUserRequest(req, res)!=1)
+    {
+        return;
+    }
 
     const user = await Users.findById(id)
 
