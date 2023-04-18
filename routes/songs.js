@@ -11,4 +11,6 @@ router.route('/:id')
     .delete(songsController.deleteSong);
 router.route('/name/:name?/author/:author?/haveVideo/:haveVideo?')
     .get(songsController.findSongs);
+router.route('/chart')
+    .get(songsController.getSongsGroupedBy);
 module.exports = router;
