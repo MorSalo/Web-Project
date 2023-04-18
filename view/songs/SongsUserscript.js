@@ -75,13 +75,13 @@ function appendToSongsTable(song) {
     }
     else
     {
-        linkText.text = song.link;
+        linkText.text = "no video available yet";
     }
     linkCell.appendChild(linkText);
     row.appendChild(linkCell);
 
     const publishedCell = document.createElement("td");
-    publishedCell.textContent = song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/");;
+    publishedCell.textContent = song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/");
     row.appendChild(publishedCell);
 
     songData.appendChild(row);

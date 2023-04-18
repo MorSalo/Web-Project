@@ -208,7 +208,7 @@ function appendToSongsTable(song) {
         <td id="newLink">
         <input type="string" id="newLinkInput" value="${linkValue}" >
         </td>
-        <td name="published">${song.published}</td>
+        <td name="published">${song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/")}</td>
         <td>
             <button id="updateButton" class="btn btn-update" onclick="updateSong('${songId}')">UPDATE</button>
         </td>
