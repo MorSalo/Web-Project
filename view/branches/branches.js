@@ -1,9 +1,15 @@
 const URL = "http://localhost:3000/branches"
 
+// $(document).bind('pageinit',function () {
+//     initMap()
+//     read_all()
+// })
+
 $(document).ready(function () {
     initMap()
     read_all()
 })
+
 $("#addButton").click(function (e) {
     e.preventDefault()
     createBranch()
