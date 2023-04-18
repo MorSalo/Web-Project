@@ -122,11 +122,27 @@ const findBranch = async (city2,years2,open2) => {
 
 }
 
+const getBranchesGroupedBy = async () => {
+    console.log("in service");
+
+    const branches = await Branch.aggregate([
+        {
+            $group: {
+                _id: '$city',
+                count: { $sum: 1 } // this means that the count will increment by 1
+            }
+        }
+    ]);
+    console.log("service:" + branches);
+    return branches;
+}
+
 module.exports = {
     createBranch,
     getBranchById,
     getBranches,
     updateBranch,
     deleteBranch,
-    findBranch
+    findBranch,
+    getBranchesGroupedBy
 }

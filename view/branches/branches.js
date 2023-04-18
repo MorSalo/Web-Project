@@ -8,6 +8,7 @@ const URL = "http://localhost:3000/branches"
 $(document).ready(function () {
     initMap()
     read_all()
+    read_chart();
 })
 
 $("#addButton").click(function (e) {
@@ -247,6 +248,21 @@ function clearTable() {
     }
 }
 
+//statistics
+function read_chart() {
+    $.ajax({
+        type: "GET",
+        url: URL+'/chart',
+        success: function (res) {
+            foo(res.branches)        
+        },
+        error: function (res) {
+            alert(res.responseText)
+        }
+    });
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////////////
 // //GOOGLE MAPS
 ///////////////////////////////////////////////////////////////////////////////////////
@@ -268,7 +284,6 @@ async function initMap() {
     zoom: 7,
     center: position,
   });
-
 }
 
 function addMarker(branch) {
@@ -312,4 +327,76 @@ function deleteMarkers() {
     markers = [];
 }
   
+/////////////////////////////////////////////////////////////////
+// //Statistics
+/////////////////////////////////////////////////////////////////
+
+function foo(data){
+
+    // Create the SVG element
+        const svg = d3.select('#chartsvg');
+    
+    // Set the chart's dimensions
+        const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+        const width = 600 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+    
+    // Set the scale for the chart
+        const xScale = d3.scaleBand()
+            .domain(data.map(d => d._id))
+            .range([0, width])
+            .padding(0.1);
+    
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.count)])
+            .range([height, 0]);
+    
+    // Create the chart
+        const chart = svg.append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    
+        chart.selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('x', d => xScale(d._id))
+            .attr('y', d => yScale(d.count))
+            .attr('width', xScale.bandwidth())
+            .attr('height', d => height - yScale(d.count))
+            .attr('fill', 'steelblue');
+    
+        chart.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .attr('x', d => xScale(d._id) + xScale.bandwidth() / 2)
+            .attr('y', d => yScale(d.count) - 5)
+            .attr('text-anchor', 'middle')
+            .text(d => d.count);
+    
+    // Add the x-axis label
+        chart.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom)
+            .attr('text-anchor', 'middle')
+            .text('City');
+    
+    // Add the x-axis
+        chart.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(d3.axisBottom(xScale));
+    
+    // Add the y-axis label
+        chart.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -170)
+            .attr('y', -32)
+            .attr('text-anchor', 'middle')
+            .text('Number of branches');
+    
+    // Add the y-axis
+        chart.append('g')
+            .call(d3.axisLeft(yScale));
+    
+    }
 
