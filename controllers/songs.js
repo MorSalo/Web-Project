@@ -146,10 +146,27 @@ const findAllSongs = async (name2,author2,haveVideo2) => {
         return undefined
     }
 }
+
+const getSongsGroupedBy = async (req, res) => {
+    const songs = await Songs.aggregate([
+        {
+            $group: {
+                _id: '$author',
+                count: { $sum: 1 } // this means that the count will increment by 1
+            }
+        }
+    ]);
+
+    res.json({
+        songs
+    })
+}
+
 module.exports = {
     getSongs,
     createSong,
     updateSong,
     deleteSong,
-    findSongs
+    findSongs,
+    getSongsGroupedBy
 };

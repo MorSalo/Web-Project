@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/d3-scale": "^4.0.3",
     "body-parser": "^1.20.2",
     "cors": "^2.8.5",
     "d3-scale": "^4.0.2",
