@@ -11,7 +11,7 @@ router.route('/:id')
     .delete(controllerBranches.deleteBranch);
 router.route('/city/:city?/years/:years?/open/:open?')
     .get(controllerBranches.findBranch);
-router.route('/chart')
+router.route('/chart/svg')
     .get(controllerBranches.getBranchesGroupedBy);
 
 

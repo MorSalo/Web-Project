@@ -8,7 +8,7 @@ const URL = "http://localhost:3000/branches"
 $(document).ready(function () {
     initMap()
     read_all()
-    read_chart();
+    read_chart()
 })
 
 $("#addButton").click(function (e) {
@@ -252,7 +252,7 @@ function clearTable() {
 function read_chart() {
     $.ajax({
         type: "GET",
-        url: URL+'/chart',
+        url: URL+'/chart/svg',
         success: function (res) {
             foo(res.branches)        
         },

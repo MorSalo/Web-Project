@@ -1,4 +1,5 @@
 const branchesService = require('../services/branches');
+const Branch = require('../models/branches');
 
 const createBranch = async (req, res) => {
   var {city,address,years,open} = req.body;
@@ -66,15 +67,16 @@ const findBranch = async (req,res) => {
   res.json({branches});
 }
 
-const getBranchesGroupedBy = async (req, res) => {
-  console.log("in controller");
-
-  const branches =await branchesService.getBranchesGroupedBy();
-  console.log("controller: "+branches)
-  if(branches==undefined){
-    console.log("`controller got undefined");
-    return undefined;
-  }
+const getBranchesGroupedBy = async (req, res) => {  
+  const branches = await Branch.aggregate([
+    {
+        $group: {
+            _id: '$city',
+            count: { $sum: 1 } // this means that the count will increment by 1
+        }
+    }
+  ]);
+  
   res.json({
       branches
   })
