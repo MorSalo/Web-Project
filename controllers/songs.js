@@ -9,13 +9,13 @@ const getSongs = async (req, res) => {
 };
 
 const createSong = async (req, res) => {
-    const {name, author, rating, haveVideo, link} = req.body
+    const {name, author, likes, haveVideo, link} = req.body
     if( await validateSongRequest(req, res)!=1)
         return;
     const newSong = new Songs({
         name,
         author,
-        rating,
+        likes,
         haveVideo,
         link
     })
@@ -29,18 +29,17 @@ const createSong = async (req, res) => {
     })
 }
 
-function IsEmpty(name, author, rating) {
-    return (!name || !author || !rating);
+function IsEmpty(name, author) {
+    return (!name || !author);
 
 }
 
 async function validateSongRequest(req, res) {
-    const {name, author, rating, haveVideo, link} = req.body;
-    if (IsEmpty(name, author, rating)) {
+    const {name, author, likes, haveVideo, link} = req.body;
+    if (IsEmpty(name, author)) {
         return res.status(404).json({errors: ['Missing some variables exists']});
-
     }
-    const dbsong = await Songs.findOne({name, author, rating, haveVideo, link});
+    const dbsong = await Songs.findOne({name, author ,haveVideo, link});
 
     if (dbsong) {
         return res.status(404).json({errors: ['Song already exists']});
@@ -50,20 +49,19 @@ async function validateSongRequest(req, res) {
 
 const updateSong = async (req, res) => {
     const {id} = req.params
-    const {name, author, rating, haveVideo, link} = req.body
+    var {name, author, likes, haveVideo, link} = req.body
     if(await validateSongRequest(req, res)!=1)
     {
         return;
     }
-
     const song = await Songs.findById(id)
 
     if (!song) {
         return res.status(404).json({errors: ['Song not found']});
     }
 
-    await Songs.updateOne({_id: id}, {name, author, rating, haveVideo, link})
-    const updatedSong = await Songs.findOne({name, author, rating, haveVideo, link});
+    await Songs.updateOne({_id: id}, {name, author, likes, haveVideo, link})
+    const updatedSong = await Songs.findOne({name, author, likes, haveVideo, link});
     const songs = await Songs.find()
     const io = req.app.get('socketio');
     io.emit('updated-song', {

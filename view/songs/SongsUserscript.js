@@ -2,13 +2,38 @@ const URL = "http://localhost:3000/songs";
 $(document).ready(function () {
     const socket = io("http://localhost:3000");
     socket.on("new-song", (res) => {
-        appendToSongsTable(res.song)
+        appendToSongsTable(res.song);
+        $(`#chartsvg`).empty();
+        read_chart();
+        if(res.song.link!="null") {
+            getLikes(res.song)
+        }
+        else
+        {
+            $(`#song-${song._id} #newLikes`)[0].innerText = 0;
+        }
     })
     socket.on("deleted-song", (res) => {
         console.log("should be deleted");
         $(`#song-${res.song._id}`).remove();
+        $(`#chartsvg`).empty();
+        read_chart();
     });
-    read_all()
+    socket.on("updated-song", (res) => {
+        $(`#song-${res.song._id}`).remove();
+        appendToSongsTable(res.song)
+        $(`#chartsvg`).empty();
+        read_chart();
+        if(res.song.link=="null") {
+            $(`#song-${song._id} #newLikes`)[0].innerText = 0;
+        }
+        else
+        {
+            getLikes(res.song)
+        }
+    });
+    read_all();
+    read_chart();
 })
 $("#clearButton").click(function (e) {
     e.preventDefault()
@@ -25,7 +50,7 @@ $("#findButton").click(function (e) {
 function clearForm() {
     $("#name").val('')
     $("#author").val('')
-    $("#rating").val('')
+    $("#likes").val('')
     $("#haveVideo").prop('checked', false)
     $("#link").val('')
 }
@@ -36,6 +61,23 @@ function read_all() {
         url: URL,
         success: function (res) {
             res.songs.map(appendToSongsTable)
+            const songsWithLinks = res.songs.filter(song => song.link !== "null")
+            for (let i = 0; i < songsWithLinks.length; i++) {
+                getLikes(songsWithLinks[i])
+            }
+        },
+        error: function (res) {
+            alert(res.responseText)
+        }
+    });
+}
+
+function read_chart() {
+    $.ajax({
+        type: "GET",
+        url: URL+'/chart',
+        success: function (res) {
+            statistics(res.songs)        
         },
         error: function (res) {
             alert(res.responseText)
@@ -44,7 +86,58 @@ function read_all() {
 }
 
 function appendToSongsTable(song) {
-    const songData = document.getElementById("song-data");
+    const likesValue = parseInt(song.likes)
+    const nameValue = song.name
+    const authorValue = song.author
+    const haveVideoValue = song.haveVideo ? 'checked' : ''
+    const linkValue = song.link
+    const songId = String(song._id)
+    if(song.link=="null"){
+        $("#songsTable > tbody:last-child").append(`
+        <tr id="song-${song._id}">
+        <td id="newName">
+        ${nameValue}
+        </td>
+        <td id="newAuthor">
+        ${authorValue}
+        </td>
+        <td id="newLikes">
+        ${likesValue}
+        </td>
+        <td id="newHaveVideo">
+        ${song.haveVideo}
+        </td>
+        <td id="newLink">
+        ${linkValue}
+        </td>
+        <td name="published">${song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/")}</td>
+        </tr>
+        `);
+    }
+    else
+    {
+        $("#songsTable > tbody:last-child").append(`
+        <tr id="song-${song._id}">
+        <td id="newName">
+        ${nameValue}
+        </td>
+        <td id="newAuthor">
+        ${authorValue}
+        </td>
+        <td id="newLikes">
+        ${likesValue}
+        </td>
+        <td id="newHaveVideo">
+        ${song.haveVideo}
+        </td>
+        <td id="newLink">
+        <a href=${linkValue} style.color = "#ff0000">Click here for video</a>"
+        </td>
+        <td name="published">${song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/")}</td>
+        </tr>
+    `);
+    }
+    /*const songData = document.getElementById("song-data");
 
     const row = document.createElement("tr");
 
@@ -58,9 +151,10 @@ function appendToSongsTable(song) {
     authorCell.textContent = song.author;
     row.appendChild(authorCell);
 
-    const ratingCell = document.createElement("td");
-    ratingCell.textContent = song.rating;
-    row.appendChild(ratingCell);
+    var likesCell = document.createElement("td");
+    likesCell.setAttribute("_id",`likesTD`)
+    likesCell.textContent = song.likes;
+    row.appendChild(likesCell);
 
     const haveVideoCell = document.createElement("td");
     haveVideoCell.textContent = song.haveVideo;
@@ -85,6 +179,7 @@ function appendToSongsTable(song) {
     row.appendChild(publishedCell);
 
     songData.appendChild(row);
+    */
 }
 function findSongs()
 {
@@ -145,3 +240,89 @@ function clearTable()
       table.deleteRow(i);
     }
 }
+
+function statistics(data){
+
+    // Create the SVG element
+        const svg = d3.select('#chartsvg');
+    
+    // Set the chart's dimensions
+        const margin = { top: 20, right: 20, bottom: 40, left: 50 };
+        const width = 600 - margin.left - margin.right;
+        const height = 400 - margin.top - margin.bottom;
+    
+    // Set the scale for the chart
+        const xScale = d3.scaleBand()
+            .domain(data.map(d => d._id))
+            .range([0, width])
+            .padding(0.1);
+    
+        const yScale = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.count)])
+            .range([height, 0]);
+    
+    // Create the chart
+        const chart = svg.append('g')
+            .attr('transform', `translate(${margin.left}, ${margin.top})`);
+    
+        chart.selectAll('rect')
+            .data(data)
+            .enter()
+            .append('rect')
+            .attr('x', d => xScale(d._id))
+            .attr('y', d => yScale(d.count))
+            .attr('width', xScale.bandwidth())
+            .attr('height', d => height - yScale(d.count))
+            .attr('fill', 'steelblue');
+    
+        chart.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .attr('x', d => xScale(d._id) + xScale.bandwidth() / 2)
+            .attr('y', d => yScale(d.count) - 5)
+            .attr('text-anchor', 'middle')
+            .text(d => d.count);
+    
+    // Add the x-axis label
+        chart.append('text')
+            .attr('x', width / 2)
+            .attr('y', height + margin.bottom)
+            .attr('text-anchor', 'middle')
+            .text('Artist');
+    
+    // Add the x-axis
+        chart.append('g')
+            .attr('transform', `translate(0, ${height})`)
+            .call(d3.axisBottom(xScale));
+    
+    // Add the y-axis label
+        chart.append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('x', -170)
+            .attr('y', -32)
+            .attr('text-anchor', 'middle')
+            .text('Number of songs');
+    
+    // Add the y-axis
+        chart.append('g')
+            .call(d3.axisLeft(yScale));
+    
+    }
+    async function getLikes(song) {
+        const VIDEO_ID = song.link.slice(32)
+        const Youtube_Api_Super_Secret_Noams_Key='AIzaSyCe6UgRnWDYgz2_IrOz-uvOA7IAjxFsihM'
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${VIDEO_ID}&key=${Youtube_Api_Super_Secret_Noams_Key}`;
+        $.ajax({
+            url: apiUrl,
+            method: 'GET',
+            success: function (response) {
+                const likes = response.items[0].statistics.likeCount;
+                $(`#song-${song._id} #newLikes`)[0].innerText = likes;
+            },
+            error: function (error) {
+                // Handle any errors here
+                console.log(error);
+            }
+        });
+    }

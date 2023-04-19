@@ -14,7 +14,7 @@
             <tr>
                 <th>Name</th>
                 <th>Author</th>
-                <th>Rating</th>
+                <th>Likes</th>
                 <th>Have video</th>
                 <th>Link</th>
                 <th>Published</th>
@@ -32,8 +32,8 @@
                 <input type="text" id="author" class="form-control"/>
             </div>
             <div>
-                <label for="rating">Rating</label>
-                <input type="number" id="rating" class="form-control" min="0" max="5"/>
+                <label for="likes">Likes</label>
+                <input type="number" id="likes" class="form-control" disabled/>
             </div>
             <div>
                 <label for="haveVideo">Have Video</label>
@@ -60,7 +60,7 @@
         <div>
             <h2>D3 Chart of Number of Songs and Artists</h2>
             <svg id="chartsvg" width="600" height="400"></svg>
-            
+
             <div class="row">
                 <div class="col-md-8">
                   <h3>Check The Parameters For The Search</h3>
@@ -92,11 +92,10 @@
     document.getElementById('haveVideo').onchange = function() {
         document.getElementById('link').disabled = !this.checked;
         $("#link").val('');
-
     }
     document.getElementById('haveVideoCB').onchange = function() {
         document.getElementById('linkCB').disabled = !this.checked;
-    }    
+    }
 </script>
 <link rel="stylesheet" href="SongsAdmin.css"/>
 </body>

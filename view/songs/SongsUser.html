@@ -14,7 +14,7 @@
             <tr>
                 <th>Name</th>
                 <th>Author</th>
-                <th>Rating</th>
+                <th>Likes</th>
                 <th>Have Video</th>
                 <th>Link</th>
                 <th>Published</th>
@@ -33,8 +33,8 @@
                 <input type="text" id="author" class="form-control"/>
             </div>
             <div>
-                <label for="rating">Rating</label>
-                <input type="number" id="rating" class="form-control" min="0"/>
+                <label for="likes">Likes</label>
+                <input type="number" id="likes" class="form-control" min="0"/>
             </div>
             <div>
                 <label for="haveVideo">Have video</label>
@@ -49,6 +49,10 @@
             <button type="button" id="findButton" class="btn btn-primary">Search Songs</button>
             <button type="button" id="clearButton" class="btn btn-primary">Clear Songs</button>
             <button type="button" id="showButton" class="btn btn-primary">Show All Songs</button>
+        </div>
+        <div>
+            <h2>D3 Chart of Number of Songs and Artists</h2>
+            <svg id="chartsvg" width="600" height="400"></svg>
         </div>
         <div class="row">
             <div class="col-md-8">

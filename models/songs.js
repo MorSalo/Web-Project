@@ -10,7 +10,7 @@ const Songs = new Schema({
         type: String,
         required: true
     },
-    rating: {
+    likes: {
         type: Number,
         required: true
     },
