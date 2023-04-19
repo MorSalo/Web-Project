@@ -1,7 +1,15 @@
 const URL = "http://localhost:3000/branches"
+
+// $(document).bind('pageinit',function () {
+//     initMap()
+//     read_all()
+// })
+
 $(document).ready(function () {
+    initMap()
     read_all()
 })
+
 $("#addButton").click(function (e) {
     e.preventDefault()
     createBranch()
@@ -23,6 +31,7 @@ $("#findButton").click(function (e){
 $("#showButton").click(function(e){
     e.preventDefault()
     clearTable()
+    deleteMarkers()
     read_all()
 })
 
@@ -54,11 +63,9 @@ function read_all() {
         url: URL+"/",
         dataType: "json",
         success: function (res) {
-            //not sure that it will work bc i work with shcema an d not array
+            clearTable()
             res.forEach(appendToBranchTable)
-
-            //appendToBranchTable(res.bra)
-            
+            res.forEach(addMarker)
         },
         error: function (res) {
             alert(res.responseText)
@@ -74,6 +81,9 @@ function deleteBranch(branchId) {
         url: URL + '/' + branchId,
         success: function () {
             $(`#${branchId}`).remove()
+
+            deleteMarkers()
+            read_all()
         },
         error: function (res) {
             alert(res.responseText)
@@ -103,6 +113,9 @@ function createBranch() {
             console.log(res.branch)
             appendToBranchTable(res.branch)
             clearForm()
+
+            deleteMarkers()
+            read_all()
         },
         error: function (res) {
             alert(res.responseText)
@@ -144,6 +157,9 @@ function updateBranch(branchId) {
         $(`#${branchId}`).remove()
         appendToBranchTable(res.branch)
         clearForm()
+
+        deleteMarkers()
+        read_all()
       },
       error: function (res) {
         alert(res.responseText)
@@ -258,6 +274,71 @@ function clearTable() {
     for (var i = rowCount - 1; i >= 0; i--) {
       table.deleteRow(i);
     }
+}
+
+////////////////////////////////////////////////////////////////////////////////////////
+// //GOOGLE MAPS
+///////////////////////////////////////////////////////////////////////////////////////
+
+let map;
+let markers = [];
+let geocoder;
+
+// Initialize and add the map
+async function initMap() {
+  // The location of the collage    31.970557137683475, 34.772830115344256
+  const position = { lat: 31.970557137683475, lng: 34.772830115344256 };
+  // Request needed libraries.
+  const { Map } = await google.maps.importLibrary("maps");
+  const { AdvancedMarkerView } = await google.maps.importLibrary("marker");
+
+  // The map, centered at the collage
+  map = new Map(document.getElementById("map"), {
+    zoom: 7,
+    center: position,
+  });
+
+}
+
+function addMarker(branch) {
+    //convert the address to position on the map
+
+    console.log("in the add marker")
+    geocoder = new google.maps.Geocoder();
+    var address = branch.address + ", " + branch.city
+    geocoder.geocode( { 'address': address}, function(results, status) {
+        console.log("in the geo")
+
+        if (status == 'OK') {
+            console.log("ok")
+            var where = results[0].geometry.location;
+            console.log(where)
+          var marker = new google.maps.Marker({
+              map: map,
+              position: where
+          });
+          marker.setMap(map);
+          markers.push(marker);
+        } else {
+          alert('Geocode was not successful for the following reason: ' + status);
+        }
+    });
+}
+
+
+function setMapOnAll(map) {
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].setMap(map);
+    }
+}
+  
+function hideMarkers() {
+    setMapOnAll(null);
+}
+
+function deleteMarkers() {
+    hideMarkers();
+    markers = [];
 }
 
 

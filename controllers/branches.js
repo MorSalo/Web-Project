@@ -66,11 +66,26 @@ const findBranch = async (req,res) => {
   res.json({branches});
 }
 
+const getBranchesGroupedBy = async (req, res) => {
+  console.log("in controller");
+
+  const branches =await branchesService.getBranchesGroupedBy();
+  console.log("controller: "+branches)
+  if(branches==undefined){
+    console.log("`controller got undefined");
+    return undefined;
+  }
+  res.json({
+      branches
+  })
+}
+
 module.exports = {
   createBranch,
   getBranchById,
   getBranches,
   updateBranch,
   deleteBranch,
-  findBranch
+  findBranch,
+  getBranchesGroupedBy
 };
