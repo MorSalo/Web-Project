@@ -3,6 +3,7 @@ const Branch = require('../models/branches');
 
 const createBranch = async (req, res) => {
   var {city,address,years,open} = req.body;
+  //open,.. not undifined & cant be ''
   const branch = await branchesService.createBranch(city,address,years,open);
   if(branch == undefined){
     return res.status(404).json({ errors: ['Branch already exist'] });
