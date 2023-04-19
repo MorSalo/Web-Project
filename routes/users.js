@@ -11,8 +11,7 @@ router.route('/:id')
     .delete(usersController.deleteUser)
 
 router.route('/auth')
-    .post(usersController.validateUser)
-
+.post(usersController.validateUser)
 router.route('/username/:username?/email/:email?/isAdmin/:isAdmin?')
     .get(usersController.findUsers);
 

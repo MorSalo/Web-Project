@@ -19,7 +19,6 @@ function logIn()
         data: JSON.stringify(data),
         success: function (res) {
             localStorage.setItem('token', res.token);
-            console.log('innnnn')
             if(res.isAdmin){
                 window.location.href = '../main/main.html';
             }

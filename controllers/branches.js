@@ -1,9 +1,9 @@
 const branchesService = require('../services/branches');
+const Branch = require('../models/branches');
 
 const createBranch = async (req, res) => {
   var {city,address,years,open} = req.body;
   const branch = await branchesService.createBranch(city,address,years,open);
-  console.log(branch);
   if(branch == undefined){
     return res.status(404).json({ errors: ['Branch already exist'] });
   }
@@ -43,7 +43,9 @@ const updateBranch = async (req, res) => {
 
 const deleteBranch = async (req, res) => {
   const {id} = req.params;
-  console.log("controllers delete id:"+id)
+  if(id==undefined){
+    return res.status(404).json({ errors: ['Id is missing'] });
+  }
   const branch = await branchesService.deleteBranch(id);
   if (!branch) {
     return res.status(404).json({ errors: ['Branch not found'] });
@@ -53,9 +55,7 @@ const deleteBranch = async (req, res) => {
 };
 
 const findBranch = async (req,res) => {
-  console.log("in the controller")
   const {city,years,open} = req.params
-  console.log("Controllers: the params we got from routs: "+"city= "+city+" ,years= "+years+" ,open= "+open)
   const branches = await branchesService.findBranch(city,years,open);
   //should i return null object or error?
   //is the if nessecery?
@@ -66,15 +66,16 @@ const findBranch = async (req,res) => {
   res.json({branches});
 }
 
-const getBranchesGroupedBy = async (req, res) => {
-  console.log("in controller");
-
-  const branches =await branchesService.getBranchesGroupedBy();
-  console.log("controller: "+branches)
-  if(branches==undefined){
-    console.log("`controller got undefined");
-    return undefined;
-  }
+const getBranchesGroupedBy = async (req, res) => {  
+  const branches = await Branch.aggregate([
+    {
+        $group: {
+            _id: '$city',
+            count: { $sum: 1 } // this means that the count will increment by 1
+        }
+    }
+  ]);
+  
   res.json({
       branches
   })
