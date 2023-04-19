@@ -3,14 +3,34 @@ $(document).ready(function () {
     const socket = io("http://localhost:3000");
     socket.on("new-song", (res) => {
         appendToSongsTable(res.song)
+        $(`#chartsvg`).empty();
+        read_chart();
+        if(res.song.link!="null") {
+            getLikes(res.song)
+        }
+        else
+        {
+            $(`#song-${song._id} #newLikes #newLikesInput`).val(0);
+        }
     })
     socket.on("deleted-song", (res) => {
         console.log("should be deleted");
         $(`#song-${res.song._id}`).remove();
+        $(`#chartsvg`).empty();
+        read_chart();
     })
     socket.on("updated-song", (res) => {
         $(`#song-${res.song._id}`).remove();
         appendToSongsTable(res.song)
+        $(`#chartsvg`).empty();
+        read_chart();
+        if(res.song.link=="null") {
+            $(`#song-${song._id} #newLikes #newLikesInput`).val(0);
+        }
+        else
+        {
+            getLikes(res.song)
+        }
     });
     read_all();
     read_chart();
@@ -36,12 +56,12 @@ $("#findButton").click(function (e) {
 function clearForm() {
     $("#name").val('')
     $("#author").val('')
-    $("#rating").val('')
+    $("#likes").val('')
     $("#haveVideo").prop('checked', false)
     $("#link").prop('checked', false)
     $("#nameCB").prop('checked', false)
     $("#authorCB").prop('checked', false)
-    $("#ratingCB").prop('checked', false)
+    $("#likesCB").prop('checked', false)
     $("#haveVideoCB").prop('checked', false)
     $("#linkCB").prop('checked', false)
 }
@@ -52,6 +72,10 @@ function read_all() {
         url: URL,
         success: function (res) {
             res.songs.map(appendToSongsTable)
+            const songsWithLinks = res.songs.filter(song => song.link !== "null")
+            for (let i = 0; i < songsWithLinks.length; i++) {
+                getLikes(songsWithLinks[i])
+            }
         },
         error: function (res) {
             alert(res.responseText)
@@ -63,7 +87,7 @@ function read_chart() {
         type: "GET",
         url: URL+'/chart',
         success: function (res) {
-            foo(res.songs)        
+            statistics(res.songs)        
         },
         error: function (res) {
             alert(res.responseText)
@@ -87,7 +111,7 @@ function deleteSong(songId) {
 function createSong() {
     var name = $("#name").val()
     var author = $("#author").val()
-    var rating = $("#rating").val()
+    var likes = 0;
     var haveVideo = $("#haveVideo").is(":checked")
     var link = $("#link").val();
     if(link=="")
@@ -95,7 +119,7 @@ function createSong() {
     const data = {
         name,
         author,
-        rating,
+        likes,
         haveVideo,
         link
     }
@@ -117,13 +141,13 @@ function createSong() {
 function updateSong(songId) {
     const name = $(`#song-${songId} #newName #newNameInput`).val()
     const author = $(`#song-${songId} #newAuthor #newAuthorInput`).val()
-    const rating = $(`#song-${songId} #newRating #newRatingInput`).val()
+    const likes = $(`#song-${songId} #newLikes #newLikesInput`).val()
     const haveVideo = $(`#song-${songId} #newHaveVideo #newHaveVideoInput`).prop('checked')
     const link = $(`#song-${songId} #newLink #newLinkInput`).val()
     const data = {
         name,
         author,
-        rating,
+        likes,
         haveVideo,
         link
     }
@@ -198,7 +222,7 @@ function clearTable()
     }
 }
 function appendToSongsTable(song) {
-    const ratingValue = parseInt(song.rating)
+    const likesValue = 0
     const nameValue = song.name
     const authorValue = song.author
     const haveVideoValue = song.haveVideo ? 'checked' : ''
@@ -212,8 +236,8 @@ function appendToSongsTable(song) {
         <td id="newAuthor">
         <input type="string" id="newAuthorInput" value="${authorValue}">
         </td>
-        <td id="newRating">
-        <input type="number" id="newRatingInput" value="${ratingValue}" min="0" max="5"/>
+        <td id="newLikes">
+        <input type="string" id="newLikesInput" value="${likesValue}" disabled/>
         </td>
         <td id="newHaveVideo">
         <input type="checkbox" id="newHaveVideoInput" ${haveVideoValue}>
@@ -230,9 +254,8 @@ function appendToSongsTable(song) {
         </td>
         </tr>
     `);
-    
 }
-function foo(data){
+function statistics(data){
 
     // Create the SVG element
         const svg = d3.select('#chartsvg');
@@ -299,4 +322,21 @@ function foo(data){
         chart.append('g')
             .call(d3.axisLeft(yScale));
     
+    }
+    async function getLikes(song) {
+        const VIDEO_ID = song.link.slice(32)
+        const Youtube_Api_Super_Secret_Noams_Key='AIzaSyCe6UgRnWDYgz2_IrOz-uvOA7IAjxFsihM'
+        const apiUrl = `https://www.googleapis.com/youtube/v3/videos?part=statistics&id=${VIDEO_ID}&key=${Youtube_Api_Super_Secret_Noams_Key}`;
+        $.ajax({
+            url: apiUrl,
+            method: 'GET',
+            success: function (response) {
+                const likes = response.items[0].statistics.likeCount
+                $(`#song-${song._id} #newLikes #newLikesInput`).val(likes);
+            },
+            error: function (error) {
+                // Handle any errors here
+                console.log(error);
+            }
+        });
     }
