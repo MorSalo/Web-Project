@@ -8,7 +8,6 @@ const branches = require('./routes/branches');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const http = require('http');
-const dotenv = require('dotenv');
 // const googleMaps = require('@google/maps');
 require('dotenv').config();
 const server = http.createServer(app);
