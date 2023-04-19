@@ -4,7 +4,6 @@ const Branch = require('../models/branches');
 const createBranch = async (req, res) => {
   var {city,address,years,open} = req.body;
   const branch = await branchesService.createBranch(city,address,years,open);
-  console.log(branch);
   if(branch == undefined){
     return res.status(404).json({ errors: ['Branch already exist'] });
   }
@@ -44,7 +43,9 @@ const updateBranch = async (req, res) => {
 
 const deleteBranch = async (req, res) => {
   const {id} = req.params;
-  console.log("controllers delete id:"+id)
+  if(id==undefined){
+    return res.status(404).json({ errors: ['Id is missing'] });
+  }
   const branch = await branchesService.deleteBranch(id);
   if (!branch) {
     return res.status(404).json({ errors: ['Branch not found'] });
@@ -54,9 +55,7 @@ const deleteBranch = async (req, res) => {
 };
 
 const findBranch = async (req,res) => {
-  console.log("in the controller")
   const {city,years,open} = req.params
-  console.log("Controllers: the params we got from routs: "+"city= "+city+" ,years= "+years+" ,open= "+open)
   const branches = await branchesService.findBranch(city,years,open);
   //should i return null object or error?
   //is the if nessecery?
