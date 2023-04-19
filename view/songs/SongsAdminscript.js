@@ -26,7 +26,7 @@ $(document).ready(function () {
         $(`#chartsvg`).empty();
         read_chart();
         if(res.song.link=="null") {
-            $(`#song-${song._id} #newLikes #newLikesInput`).val(0);
+            $(`#song-${res.song._id} #newLikes #newLikesInput`).val(0);
         }
         else
         {
@@ -42,7 +42,6 @@ $(document).ready(function () {
 $("#addButton").click(function (e) {
     e.preventDefault()
     createSong()
-    TweetIt($("#name"), $("#author"));
 })
 $("#clearButton").click(function (e) {
     e.preventDefault()
@@ -133,9 +132,7 @@ function createSong() {
         contentType: "application/json",
         data: JSON.stringify(data),
         success: function (res) {
-            //appendToSongsTable(res.newSong)
             clearForm()
-            TweetIt(name,author)
         },
         error: function (res) {
             alert(res.responseText)
@@ -156,7 +153,6 @@ function updateSong(songId) {
         haveVideo,
         link
     }
-    console.log(data)
     $.ajax({
         type: "PUT",
         url: URL + '/' + songId,
@@ -197,9 +193,6 @@ function findSongs()
     }else{
         url2 += "haveVideo/"
     }
-    console.log("url: " + url2);
-    console.log("name: "+name+"   author: "+author+"    haveVideo: "+haveVideo);
-
     $.ajax({
         type: "GET",
         url: url2,
@@ -326,8 +319,7 @@ function statistics(data){
     // Add the y-axis
         chart.append('g')
             .call(d3.axisLeft(yScale));
-    
-    }
+}
     async function getLikes(song) {
         const VIDEO_ID = song.link.slice(32)
         const Youtube_Api_Super_Secret_Noams_Key='AIzaSyCe6UgRnWDYgz2_IrOz-uvOA7IAjxFsihM'
@@ -346,19 +338,5 @@ function statistics(data){
         });
     }
 
-function TweetIt(name, author)
-{
-    tweet = name + "has created a new song called " + author;
-    fetch('/tweet', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({tweet: tweet})
-      }) .then(response => {
-          if(response.ok) {
-            alert('Tweet sent');
-            tweetInput.value = '';
-          } else {
-            alert('Error sending tweet');
-          }
-        });
-}
+
+    
