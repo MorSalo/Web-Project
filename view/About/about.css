@@ -8,36 +8,49 @@ canvas {
     border: 1px solid black;
     background-color: black;
     border-radius: 50%; 
-    /* display: inline-block;
-    vertical-align: left; */
-/* 
-    width: 100%;
-    height: auto;
-    max-width: 500px;
-    margin: auto;
-
-    border:1px solid #c3c3c3; */
     float:left;
-    margin-right:20px;
-    margin-bottom:15px
 
+    transition: all 2s ease;
+}
+
+canvas:hover {
+    transform: scale(1.02);
+    transform: rotate(280deg);
 }
 
 #welcome-message {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
     position: absolute !important;
     top: 100px !important;
     left: 550px !important;
 }
 
 p {
+    font-family: 'MorsFont', sans-serif;
     color: black;
     position: absolute !important;
     top: 150px !important;
     left: 550px !important;
-    /* display: inline-block;
-    vertical-align: middle; */
+
 }
 
   
-  
+@font-face {
+    font-family: 'MorsFont';
+    src: url('./Raleway-Regular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+.multi-column-text {
+    column-count: 2;
+}
+
+aside {
+    position: absolute !important;
+    top: 350px !important;
+    left: 550px !important;
+    display: block;
+    clear: both;
+}
   

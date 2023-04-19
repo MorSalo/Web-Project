@@ -3,25 +3,6 @@ var ctx = canvas.getContext("2d");
 ctx.beginPath();
 var centerX = canvas.width / 2;
 var centerY = canvas.height / 2;
-// //grey circles
-// radius = 140;
-// ctx.arc(centerX,centerY,radius, 0 ,2*Math.PI);
-// ctx.fillStyle = ""
-
-// ctx.strokeStyle = "black";
-// ctx.lineWidth = 10;
-// for (var i = 0; i < 30; i++) {
-//   ctx.beginPath();
-//   ctx.moveTo(250 + 130 * Math.cos(i / 15 * Math.PI), 250 + 130 * Math.sin(i / 15 * Math.PI));
-//   ctx.lineTo(250 + 170 * Math.cos(i / 15 * Math.PI), 250 + 170 * Math.sin(i / 15 * Math.PI));
-//   ctx.stroke();
-// }
-
-// //red circle
-// radius = 200;
-// ctx.arc(centerX, centerY, radius, 0, 2*Math.PI);
-// ctx.fillStyle = "red";
-// ctx.fill();
 
 // Draw the outer circle
 ctx.beginPath();
