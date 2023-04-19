@@ -1,9 +1,6 @@
 const URL = "http://localhost:3000/users";
 $(document).ready(() => {
     const token = localStorage.getItem('token');
-  
-
-  
     $.ajax({
       url: URL+'/get/user',
       method: 'GET',
