@@ -17,10 +17,7 @@ const io = require("socket.io")(server,{cors: {
   }});
 
   //////////////////////// Code Alon added to allow fetch /////////////
-  app.use(cors({
-    origin: 'https://localhost:3000',
-  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  }));
+  
   //////////////////////////////////////////
 
 mongoose.connect(process.env.MongodbConectionString)
