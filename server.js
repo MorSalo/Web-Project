@@ -20,7 +20,7 @@ const io = require("socket.io")(server,{cors: {
   
   //////////////////////////////////////////
 
-mongoose.connect(process.env.MongodbConectionString)
+mongoose.connect("mongodb+srv://TheArbelim11:Noaw2005!@cluster0.koxpfis.mongodb.net/db1")
   .then(() => console.log('Connected!'));
 
 app.use(cors());
@@ -34,7 +34,7 @@ const authenticateToken = (req, res, next) => {
     return res.sendStatus(401);
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, user) => {
+  jwt.verify(token, 'noams_super_secret', (err, user) => {
     if (err) {
       return res.sendStatus(403);
     }
