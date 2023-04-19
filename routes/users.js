@@ -7,12 +7,16 @@ router.route('/')
     .post(usersController.createUser)
 
 router.route('/:id')
-    .get(usersController.getUser)
     .put(usersController.updateUser)
     .delete(usersController.deleteUser)
 
 router.route('/auth')
-.post(usersController.validateUser)
+    .post(usersController.validateUser)
+
 router.route('/username/:username?/email/:email?/isAdmin/:isAdmin?')
     .get(usersController.findUsers);
+
+router.route('/get/user')
+    .get(usersController.getUser);
+    
 module.exports = router;

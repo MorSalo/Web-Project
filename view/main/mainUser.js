@@ -2,7 +2,7 @@ $(document).ready(() => {
     const token = localStorage.getItem('token');
   
     $.ajax({
-      url: 'http://localhost:3000/users/get-user',
+      url: 'http://localhost:3000/users/get/user',
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
       success: (response) => {
