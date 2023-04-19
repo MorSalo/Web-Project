@@ -1,6 +1,5 @@
 const URL = "http://localhost:3000/songs";
 
-
 $(document).ready(function () {
     const socket = io("http://localhost:3000");
     socket.on("new-song", (res) => {
@@ -43,6 +42,7 @@ $(document).ready(function () {
 $("#addButton").click(function (e) {
     e.preventDefault()
     createSong()
+    TweetIt($("#name"), $("#author"));
 })
 $("#clearButton").click(function (e) {
     e.preventDefault()
@@ -343,3 +343,6 @@ function statistics(data){
             }
         });
     }
+
+
+    

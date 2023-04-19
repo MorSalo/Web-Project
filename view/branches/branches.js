@@ -254,7 +254,7 @@ function read_chart() {
         type: "GET",
         url: URL+'/chart/svg',
         success: function (res) {
-            foo(res.branches)        
+            Statistics(res.branches)        
         },
         error: function (res) {
             alert(res.responseText)
@@ -331,7 +331,7 @@ function deleteMarkers() {
 // //Statistics
 /////////////////////////////////////////////////////////////////
 
-function foo(data){
+function Statistics(data){
 
     // Create the SVG element
         const svg = d3.select('#chartsvg');

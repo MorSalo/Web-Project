@@ -6,7 +6,7 @@ $(document).ready(() => {
       method: 'GET',
       headers: { 'Authorization': `Bearer ${token}` },
       success: (response) => {
-        $('#welcome-message').text(`Welcome, ${response.username}!`);
+        $('#welcome-message').text(`Welcome, ${response.user.username}!`);
       },
       error: (xhr, status, error) => {
         alert(xhr.responseJSON.message);
