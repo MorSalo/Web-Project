@@ -1,4 +1,13 @@
 const URL = "http://localhost:3000/songs";
+// Import the Twitter library
+var Twitter = require('twitter');
+const client = new Twitter({
+  consumer_key: 'u0Z9fky4EN0piQ3bwJWlCtlCa',
+  consumer_secret: 'xPXzSY2wOudm4dpRDLUz9CO3CMTN2vD0CjDmodCBATV9dKytS5',
+  access_token_key: '1648417416337055745-FQpWqnRJ75tO1f7MtsUFnaVSLQt8zp',
+  access_token_secret: 'I8T00IDw9QO4c8LSQaCcbNjE9dH2gSsAKPRlEzZAItisI'
+});
+
 $(document).ready(function () {
     const socket = io("http://localhost:3000");
     socket.on("new-song", (res) => {
@@ -35,6 +44,8 @@ $(document).ready(function () {
     read_all();
     read_chart();
 })
+
+
 
 $("#addButton").click(function (e) {
     e.preventDefault()
@@ -131,6 +142,7 @@ function createSong() {
         success: function (res) {
             //appendToSongsTable(res.newSong)
             clearForm()
+            PostMessageToTwitter(name,author)
         },
         error: function (res) {
             alert(res.responseText)
@@ -340,3 +352,21 @@ function statistics(data){
             }
         });
     }
+
+
+
+function PostMessageToTwitter(song_name, author){
+// Define the tweet content
+const message = "'" + song_name + "' has been added by " + "'" + author + "'";
+const tweet = {
+  status: message
+};
+
+// Post the tweet
+client.post('statuses/update', tweet,  function(error, tweet, response) {
+    if(error) throw error;
+    console.log(tweet);  // Tweet body.
+    console.log(response);  // Raw response object.
+  });
+}
+    
