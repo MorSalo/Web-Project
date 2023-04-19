@@ -66,11 +66,9 @@ const deleteBranch = async (req, res) => {
 const findBranch = async (req,res) => {
   const {city,years,open} = req.params
   const branches = await branchesService.findBranch(city,years,open);
-  //should i return null object or error?
-  //is the if nessecery?
+
   if(branches == undefined){
     return res.json({branches})
-    //return res.status(404).json({ errors: ['Branches not found'] });
   }
   res.json({branches});
 }
@@ -91,18 +89,13 @@ const getBranchesGroupedBy = async (req, res) => {
 }
 function IsNotOk(city, address,years,open) {
   console.log(city,address)
-  if(city!=undefined && address!=undefined && city!="" && address!="")
+  if(city!=undefined && address!=undefined && open!=undefined  && years != undefined && city!="" && address!="")
   {
-    console.log("past 1")
+    console.log("pass 1")
       if(parseInt(years)<24 && parseInt(years)>0 && years!="")
       {
-        console.log("past 2");
-        console.log(open);
-        if(open != undefined)
-        {
-          return false;
-        }
-
+        console.log("pass 2");
+        return false;
       }
   }
   return true;
