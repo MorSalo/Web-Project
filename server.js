@@ -15,6 +15,14 @@ const server = http.createServer(app);
 const io = require("socket.io")(server,{cors: {
     origin: "*",
   }});
+var Twitter = require('twitter');
+const Twitterclient = new Twitter({
+  consumer_key: 'u0Z9fky4EN0piQ3bwJWlCtlCa',
+  consumer_secret: 'xPXzSY2wOudm4dpRDLUz9CO3CMTN2vD0CjDmodCBATV9dKytS5',
+  access_token_key: '1648417416337055745-FQpWqnRJ75tO1f7MtsUFnaVSLQt8zp',
+  access_token_secret: 'I8T00IDw9QO4c8LSQaCcbNjE9dH2gSsAKPRlEzZAItisI'
+});
+
 mongoose.connect(process.env.MongodbConectionString)
   .then(() => console.log('Connected!'));
 

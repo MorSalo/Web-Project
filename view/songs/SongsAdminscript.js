@@ -1,6 +1,5 @@
 const URL = "http://localhost:3000/songs";
 // Import the Twitter library
-var Twitter = require('twitter');
 const client = new Twitter({
   consumer_key: 'u0Z9fky4EN0piQ3bwJWlCtlCa',
   consumer_secret: 'xPXzSY2wOudm4dpRDLUz9CO3CMTN2vD0CjDmodCBATV9dKytS5',
