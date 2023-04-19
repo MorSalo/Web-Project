@@ -39,7 +39,10 @@ async function validateUserRequest(req, res) {
     const {username, email, password, isAdmin } = req.body;
     if (IsEmpty(username, email, password)) {
         return res.status(404).json({errors: ['Missing some variables exists']});
-
+    }
+    if(!email.includes('@'))
+    {
+        return res.status(404).json({errors: ['Not a valid email']});
     }
     const dbuser = await Users.findOne({username, email, password, isAdmin });
 

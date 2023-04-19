@@ -131,7 +131,7 @@ function appendToSongsTable(song) {
         ${song.haveVideo}
         </td>
         <td id="newLink">
-        <a href=${linkValue} style.color = "#ff0000">Click here for video</a>"
+        <a href=${linkValue} style.color = "#ff0000">Click here for video</a>
         </td>
         <td name="published">${song.published.slice(0,10).replace(/-/g, "/").split("/").reverse().join("/")}</td>
         </tr>

@@ -12,7 +12,7 @@ $(document).ready(function () {
         }
         else
         {
-            $(`#song-${song._id} #newLikes #newLikesInput`).val(0);
+            $(`#song-${res.song._id} #newLikes #newLikesInput`).val(0);
         }
     })
     socket.on("deleted-song", (res) => {
@@ -135,7 +135,6 @@ function createSong() {
         success: function (res) {
             //appendToSongsTable(res.newSong)
             clearForm()
-            PostMessageToTwitter(name,author)
         },
         error: function (res) {
             alert(res.responseText)

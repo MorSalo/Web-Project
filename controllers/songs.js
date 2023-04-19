@@ -1,5 +1,5 @@
 const Songs = require('../models/songs')
-
+const {TwitterApi} = require('twitter-api-v2');
 const getSongs = async (req, res) => {
     const songs = await Songs.find()
 
@@ -10,8 +10,15 @@ const getSongs = async (req, res) => {
 
 const createSong = async (req, res) => {
     const {name, author, likes, haveVideo, link} = req.body
+    const client = new TwitterApi({
+        appKey: 'oO1ZDPJXgrpWuX07g0kKWBLUX',
+        appSecret:'yWuUmIoZD9w12kTqybhGO9SWbneGuktXCWpe6qSW0jdJlAE9rS',
+        accessToken: '1648738358539976707-FCYIk9QGJO8BMhCoS5prpPCSIDxoRU',
+        accessSecret: 'ks74KGnXAUtZIugiy5eedSSK2I0PfunmNLYk3dQDqowi0'
+    })
     if( await validateSongRequest(req, res)!=1)
-        return;
+    return;
+    await client.v1.tweet("New disc: "+name+" by "+author+" available in store and web app");
     const newSong = new Songs({
         name,
         author,
@@ -159,7 +166,6 @@ const getSongsGroupedBy = async (req, res) => {
         songs
     })
 }
-
 module.exports = {
     getSongs,
     createSong,
