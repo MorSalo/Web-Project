@@ -27,13 +27,16 @@ const getBranchById = async (req, res) => {
 const updateBranch = async (req, res) => {
   //do we have what we need?
   const {id} = req.params
+  var {city,address,years,open} = req.body;
   if (!id) {
     res.status(400).json({
     message: "id required",
     });
   }
-  
-  var {city,address,years,open} = req.body;
+  if( await validateBranchRequest(req, res) != 1)
+  {
+    return;
+  }
   const branch = await branchesService.updateBranch(id,city,address,years,open);
   if (branch == undefined) {
     return res.status(404).json({ errors: ['Branch not found or already exist'] });
@@ -79,6 +82,36 @@ const getBranchesGroupedBy = async (req, res) => {
   res.json({
       branches
   })
+}
+function IsNotOk(city, address,years,open) {
+  console.log(city,address)
+  if(city!=undefined && address!=undefined && city!="" && address!="")
+  {
+    console.log("past 1")
+      if(parseInt(years)<24 && parseInt(years)>0 && years!="")
+      {
+        console.log("past 2");
+        console.log(open);
+        if(open != undefined)
+        {
+          return false;
+        }
+
+      }
+  }
+  return true;
+}
+async function validateBranchRequest(req, res) {
+  const {city, address, years, open} = req.body;
+  if (IsNotOk(city, address,years,open)) {
+      return res.status(404).json({errors: ['Problem with some variables exists']});
+  }
+  const dbbranch = await Branch.findOne({city, address, years, open});
+
+  if (dbbranch) {
+      return res.status(404).json({errors: ['Branch already exists']});
+  }
+  return 1;
 }
 
 module.exports = {
